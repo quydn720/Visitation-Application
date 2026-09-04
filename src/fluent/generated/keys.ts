@@ -21,21 +21,39 @@ declare global {
                         table: 'sp_rectangle_menu_item'
                         id: 'eb97e47961b84b77844e7a8d7aafd091'
                     }
+                    menu_my_approvals: {
+                        table: 'sp_rectangle_menu_item'
+                        id: 'e4ba9fe884ed4237b9f8a36d5ea224ad'
+                    }
                     menu_my_visit_requests: {
                         table: 'sp_rectangle_menu_item'
                         id: '96ba07306c4045d0afc22b99ed294888'
+                        deleted: true
+                    }
+                    menu_my_visits: {
+                        table: 'sp_rectangle_menu_item'
+                        id: 'c27ee2cb66c740629e0110d192bbc287'
                     }
                     menu_requests: {
                         table: 'sp_rectangle_menu_item'
                         id: 'ddd42d776a3044699574b082dd56692a'
+                        deleted: true
                     }
                     menu_submit_visit: {
                         table: 'sp_rectangle_menu_item'
                         id: 'c50bd7cf39a14ed0bb61bdaec5407ddc'
                     }
+                    menu_visit_mgmt: {
+                        table: 'sp_rectangle_menu_item'
+                        id: '521b62faa03c4e6bab1880f51daba573'
+                    }
                     package_json: {
                         table: 'sys_module'
                         id: 'f411c94f4f224ec5ac6d1a61ad31ab2e'
+                    }
+                    visitation_header: {
+                        table: 'sp_header_footer'
+                        id: '5723767eea494f479153ff396473fbd0'
                     }
                     visitation_menu: {
                         table: 'sp_instance_menu'
@@ -44,6 +62,10 @@ declare global {
                     visitation_portal: {
                         table: 'sp_portal'
                         id: '594f1b42d7614a5e9a72e5b2cf904883'
+                    }
+                    visitation_theme: {
+                        table: 'sp_theme'
+                        id: 'ae1a20f0636242c485a39032133735b8'
                     }
                 }
                 composite: [

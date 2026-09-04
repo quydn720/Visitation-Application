@@ -1,8 +1,9 @@
 import "@servicenow/sdk/global";
 import { ServicePortal } from "@servicenow/sdk/core";
+import { visitationTheme } from "../sp-theme/theme.now";
 import { visitationMenu } from "../sp-instance-menu/menu.now";
 
-// Visitation Portal - updated url_suffix from x_1085196_visita_0_visitation to visit
+// Visitation Portal - custom theme with custom header and role-based menu
 export const visitationPortal = ServicePortal({
   $id: Now.ID["visitation_portal"],
   title: "Visitation Portal",
@@ -14,8 +15,8 @@ export const visitationPortal = ServicePortal({
   notFoundPage: "3c2c9063cb11020000f8d856634c9c1f", // OOTB 404 page
 
   // Theme and menu
-  theme: "281507c44317d210ca4c1f425db8f2fd", // Coral theme
-  mainMenu: visitationMenu, // Updated: pass menu object from Fluent
+  theme: visitationTheme,
+  mainMenu: visitationMenu,
 
   // Catalog integration
   catalogs: [
