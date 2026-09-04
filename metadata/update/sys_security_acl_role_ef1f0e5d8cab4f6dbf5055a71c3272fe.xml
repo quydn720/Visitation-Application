@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:33:27</sys_created_on>
+        <sys_id>ef1f0e5d8cab4f6dbf5055a71c3272fe</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1085196_visita_0_visit.x_1085196_visita_0.receptionist</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_security_acl display_value="x_1085196_visita_0_visit">47fc9d72026b40afb367f7afcbec6fa1</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_ef1f0e5d8cab4f6dbf5055a71c3272fe</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:33:27</sys_updated_on>
+        <sys_user_role display_value="x_1085196_visita_0.receptionist" name="x_1085196_visita_0.receptionist">cda3565f1e2340a4a557b46c0a5ef69d</sys_user_role>
+    </sys_security_acl_role>
+</record_update>

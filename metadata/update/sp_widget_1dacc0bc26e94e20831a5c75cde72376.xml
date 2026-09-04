@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function($window) {
+  var c = this;
+
+  c.loading = false;
+  c.cancelling = false;
+
+  c.getStatusClass = function(status) {
+    var map = {
+      'pending': 'label-warning',
+      'approved': 'label-info',
+      'checked_in': 'label-success',
+      'checked_out': 'label-default',
+      'cancelled': 'label-danger',
+      'rejected': 'label-danger'
+    };
+    return map[status] || 'label-default';
+  };
+
+  c.getStatusLabel = function(status) {
+    var map = {
+      'pending': 'Pending',
+      'approved': 'Approved',
+      'checked_in': 'Checked In',
+      'checked_out': 'Checked Out',
+      'cancelled': 'Cancelled',
+      'rejected': 'Rejected'
+    };
+    return map[status] || status;
+  };
+
+  c.getApprovalMessage = function() {
+    if (!c.data.visit) return '';
+    var status = c.data.visit.status;
+    if (status === 'pending') return 'Awaiting manager approval';
+    if (status === 'approved') return 'Approved by manager';
+    if (status === 'rejected') return 'Rejected by manager';
+    return '';
+  };
+
+  c.getApprovalIcon = function() {
+    if (!c.data.visit) return '';
+    var status = c.data.visit.status;
+    if (status === 'pending') return 'glyphicon-time';
+    if (status === 'approved') return 'glyphicon-ok-circle';
+    if (status === 'rejected') return 'glyphicon-remove-circle';
+    return 'glyphicon-info-sign';
+  };
+
+  c.viewDetail = function(visit) {
+    $window.location.href = '?id=' + c.data.pageId + '&sys_id=' + visit.sys_id;
+  };
+
+  c.goBack = function() {
+    $window.location.href = '?id=' + c.data.pageId;
+  };
+
+  c.cancelVisit = function() {
+    if (!c.data.visit || c.data.visit.status !== 'pending') return;
+    c.cancelling = true;
+    c.server.get({ action: 'cancel', visit_sys_id: c.data.visit.sys_id }).then(
+      function(r) {
+        c.data = r.data;
+        c.cancelling = false;
+      },
+      function() {
+        c.cancelling = false;
+      }
+    );
+  };
+};
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>/* ── Flush panel body for tables ────────────────────────── */
+.sp-card-body-flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── Table styling (css.md Section 10) ─────────────────── */
+.sp-th {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px;
+  border-bottom: 2px solid $border-tertiary;
+  background: $background-secondary;
+}
+
+.sp-td {
+  font-size: $font-size-small;
+  padding: 12px 16px;
+  color: $text-color;
+  border-bottom: 1px solid $border-tertiary;
+  vertical-align: middle;
+}
+
+.sp-clickable-row {
+  cursor: pointer;
+  &amp;:hover {
+    background: $background-secondary;
+  }
+}
+
+/* ── Buttons (css.md Section 9) ────────────────────────── */
+.sp-btn-secondary {
+  background: $background-primary;
+  border: 1px solid $border-tertiary;
+  color: $text-color;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: $border-radius-base;
+  font-size: $font-size-base;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  &amp;:hover {
+    background: $background-secondary;
+  }
+}
+
+.sp-btn-danger {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: $border-radius-base;
+  font-size: $font-size-base;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  background: $brand-danger;
+  color: $btn-primary-color;
+  &amp;:hover:not(:disabled) {
+    background: darken($brand-danger, 8%);
+  }
+  &amp;:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.sp-btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* ── Empty state (css.md Section 13) ───────────────────── */
+.sp-empty-state {
+  padding: 64px 24px;
+}
+
+.sp-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.35;
+  color: $text-muted;
+}
+
+.sp-empty-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+
+/* ── Approval status panel (custom, non-sp prefix) ─────── */
+.approval-panel .panel-body {
+  padding: 32px 24px;
+}
+
+.approval-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.approval-status-text {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+/* ── Detail list styling ───────────────────────────────── */
+.detail-list dt {
+  margin-top: 12px;
+  font-size: $font-size-small;
+}
+
+.detail-list dd {
+  font-size: $font-size-base;
+  color: $text-color;
+  margin-bottom: 4px;
+}
+
+.detail-list dt:first-child {
+  margin-top: 0;
+}
+
+/* ── Theme-aware Bootstrap label overrides ──────────────── */
+.label-success {
+  background-color: $brand-success;
+}
+.label-warning {
+  background-color: $brand-warning;
+}
+.label-danger {
+  background-color: $brand-danger;
+}
+.label-info {
+  background-color: $brand-info;
+}
+
+/* ── Spin animation (css.md Section 9) ─────────────────── */
+@keyframes sp-spin {
+  to { transform: rotate(360deg); }
+}
+.sp-spin {
+  animation: sp-spin 0.8s linear infinite;
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_my_visit_requests</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>My Visit Requests</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+  data.visits = [];
+  data.visit = null;
+  data.view = 'list';
+  data.message = '';
+  data.success = false;
+  data.pageId = 'x_1085196_visita_0_my_visits';
+
+  try {
+    // Handle cancel action
+    if (input && input.action === 'cancel' && input.visit_sys_id) {
+      var cancelGr = new GlideRecord('x_1085196_visita_0_visit');
+      if (cancelGr.get(input.visit_sys_id)) {
+        if (cancelGr.getValue('status') === 'pending' &&
+            cancelGr.getValue('requested_by') === gs.getUserID()) {
+          cancelGr.setValue('status', 'cancelled');
+          cancelGr.update();
+          data.success = true;
+          data.message = 'Visit request cancelled successfully.';
+        } else {
+          data.message = 'Unable to cancel this visit request.';
+        }
+      }
+      // Fall through to re-fetch updated data
+    }
+
+    var sysId = $sp.getParameter('sys_id');
+
+    if (sysId) {
+      // Detail view
+      data.view = 'detail';
+      var visitGr = new GlideRecord('x_1085196_visita_0_visit');
+      if (visitGr.get(sysId)) {
+        // Verify the visit belongs to current user
+        if (visitGr.getValue('requested_by') === gs.getUserID()) {
+          data.visit = {
+            sys_id: visitGr.getUniqueValue(),
+            number: visitGr.getValue('number'),
+            visitor_name: visitGr.getValue('visitor_name'),
+            visitor_email: visitGr.getValue('visitor_email'),
+            visitor_phone: visitGr.getValue('visitor_phone'),
+            visitor_company: visitGr.getValue('visitor_company'),
+            host: visitGr.getDisplayValue('host') + '',
+            visit_date: visitGr.getDisplayValue('visit_date') + '',
+            status: visitGr.getValue('status'),
+            purpose: visitGr.getValue('purpose'),
+            notes: visitGr.getValue('notes'),
+            requested_by: visitGr.getDisplayValue('requested_by') + ''
+          };
+        }
+      }
+    } else {
+      // List view — user's own visits
+      data.view = 'list';
+      var gr = new GlideRecord('x_1085196_visita_0_visit');
+      gr.addQuery('requested_by', gs.getUserID());
+      gr.orderByDesc('sys_created_on');
+      gr.setLimit(100);
+      gr.query();
+      while (gr.next()) {
+        data.visits.push({
+          sys_id: gr.getUniqueValue(),
+          number: gr.getValue('number'),
+          visitor_name: gr.getValue('visitor_name'),
+          host: gr.getDisplayValue('host') + '',
+          visit_date: gr.getDisplayValue('visit_date') + '',
+          status: gr.getValue('status'),
+          purpose: gr.getValue('purpose')
+        });
+      }
+    }
+  } catch (e) {
+    gs.error('My Visit Requests widget error: ' + e.message);
+    data.message = 'An error occurred loading visit data.';
+  }
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by/>
+        <sys_created_on/>
+        <sys_id>1dacc0bc26e94e20831a5c75cde72376</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>My Visit Requests</sys_name>
+        <sys_package/>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_1dacc0bc26e94e20831a5c75cde72376</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 07:26:53</sys_updated_on>
+        <template><![CDATA[<div>
+  <!-- Success / Error Messages -->
+  <div class="alert alert-success alert-dismissible" ng-if="c.data.success && c.data.message" role="alert">
+    <button type="button" class="close" ng-click="c.data.success=false" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="glyphicon glyphicon-ok-circle"></span>
+    {{c.data.message}}
+  </div>
+  <div class="alert alert-danger alert-dismissible" ng-if="!c.data.success && c.data.message && !c.data.success" role="alert">
+    <button type="button" class="close" ng-click="c.data.message=null" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+    {{c.data.message}}
+  </div>
+
+  <!-- ===================== LIST VIEW ===================== -->
+  <div ng-if="c.data.view === 'list'">
+    <div class="page-header">
+      <h2>
+        <span class="glyphicon glyphicon-list-alt"></span>
+        My Visit Requests
+      </h2>
+      <p class="text-muted">Track the status of your submitted visit requests</p>
+    </div>
+
+    <!-- Visit Table -->
+    <div class="panel panel-default" ng-if="c.data.visits.length > 0">
+      <div class="panel-body sp-card-body-flush">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="sp-th">Visit #</th>
+              <th class="sp-th">Visitor</th>
+              <th class="sp-th hidden-xs">Host</th>
+              <th class="sp-th hidden-xs">Visit Date</th>
+              <th class="sp-th">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="sp-clickable-row"
+                ng-repeat="visit in c.data.visits track by visit.sys_id"
+                ng-click="c.viewDetail(visit)">
+              <td class="sp-td"><strong>{{visit.number}}</strong></td>
+              <td class="sp-td">{{visit.visitor_name}}</td>
+              <td class="sp-td hidden-xs">{{visit.host}}</td>
+              <td class="sp-td hidden-xs">{{visit.visit_date}}</td>
+              <td class="sp-td">
+                <span class="label" ng-class="c.getStatusClass(visit.status)">{{c.getStatusLabel(visit.status)}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="panel panel-default" ng-if="c.data.visits.length === 0">
+      <div class="panel-body">
+        <div class="sp-empty-state text-center">
+          <span class="glyphicon glyphicon-calendar sp-empty-icon"></span>
+          <h4 class="sp-empty-title">No visit requests yet</h4>
+          <p class="text-muted">You haven't submitted any visit requests.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== DETAIL VIEW ===================== -->
+  <div ng-if="c.data.view === 'detail' && c.data.visit">
+    <!-- Back Button -->
+    <button type="button" class="btn btn-default sp-btn-secondary" ng-click="c.goBack()">
+      <span class="glyphicon glyphicon-chevron-left"></span> Back to My Visits
+    </button>
+
+    <div class="page-header">
+      <h2>
+        <span class="glyphicon glyphicon-file"></span>
+        {{c.data.visit.number}}
+        <span class="label" ng-class="c.getStatusClass(c.data.visit.status)">
+          {{c.getStatusLabel(c.data.visit.status)}}
+        </span>
+      </h2>
+    </div>
+
+    <!-- Approval Status Section -->
+    <div class="panel approval-panel"
+         ng-class="{
+           'panel-warning': c.data.visit.status === 'pending',
+           'panel-info': c.data.visit.status === 'approved',
+           'panel-danger': c.data.visit.status === 'rejected',
+           'panel-default': c.data.visit.status !== 'pending' && c.data.visit.status !== 'approved' && c.data.visit.status !== 'rejected'
+         }">
+      <div class="panel-body text-center">
+        <span class="glyphicon approval-icon" ng-class="c.getApprovalIcon()"></span>
+        <h3 class="approval-status-text">{{c.getStatusLabel(c.data.visit.status)}}</h3>
+        <p class="text-muted" ng-if="c.getApprovalMessage()">{{c.getApprovalMessage()}}</p>
+      </div>
+    </div>
+
+    <!-- Visit Details Card -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="glyphicon glyphicon-info-sign"></span> Visit Details
+        </h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <dl class="detail-list">
+              <dt class="text-muted">Visitor Name</dt>
+              <dd>{{c.data.visit.visitor_name}}</dd>
+              <dt class="text-muted">Visitor Email</dt>
+              <dd>{{c.data.visit.visitor_email || '—'}}</dd>
+              <dt class="text-muted">Visitor Phone</dt>
+              <dd>{{c.data.visit.visitor_phone || '—'}}</dd>
+              <dt class="text-muted">Visitor Company</dt>
+              <dd>{{c.data.visit.visitor_company || '—'}}</dd>
+            </dl>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <dl class="detail-list">
+              <dt class="text-muted">Host</dt>
+              <dd>{{c.data.visit.host}}</dd>
+              <dt class="text-muted">Visit Date</dt>
+              <dd>{{c.data.visit.visit_date}}</dd>
+              <dt class="text-muted">Requested By</dt>
+              <dd>{{c.data.visit.requested_by}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="row" ng-if="c.data.visit.purpose">
+          <div class="col-xs-12">
+            <dl class="detail-list">
+              <dt class="text-muted">Purpose</dt>
+              <dd>{{c.data.visit.purpose}}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="row" ng-if="c.data.visit.notes">
+          <div class="col-xs-12">
+            <dl class="detail-list">
+              <dt class="text-muted">Notes</dt>
+              <dd>{{c.data.visit.notes}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cancel Button -->
+    <div class="sp-btn-group" ng-if="c.data.visit.status === 'pending'">
+      <button type="button" class="btn btn-danger sp-btn-danger"
+              ng-click="c.cancelVisit()"
+              ng-disabled="c.cancelling">
+        <span class="glyphicon glyphicon-remove" ng-if="!c.cancelling"></span>
+        <span class="glyphicon glyphicon-refresh" ng-class="{'sp-spin': c.cancelling}" ng-if="c.cancelling"></span>
+        {{c.cancelling ? 'Cancelling...' : 'Cancel Visit Request'}}
+      </button>
+    </div>
+  </div>
+
+  <!-- Detail View — Visit Not Found -->
+  <div ng-if="c.data.view === 'detail' && !c.data.visit">
+    <button type="button" class="btn btn-default sp-btn-secondary" ng-click="c.goBack()">
+      <span class="glyphicon glyphicon-chevron-left"></span> Back to My Visits
+    </button>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="sp-empty-state text-center">
+          <span class="glyphicon glyphicon-warning-sign sp-empty-icon"></span>
+          <h4 class="sp-empty-title">Visit not found</h4>
+          <p class="text-muted">The visit request could not be found or you don't have access to view it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

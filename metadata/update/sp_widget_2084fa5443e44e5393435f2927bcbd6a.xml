@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function ($scope) {
+  var c = this;
+
+  c.loading = false;
+
+  c.refreshVisit = function () {
+    c.server.get({ sys_id: c.data.visit.sys_id }).then(function (r) {
+      c.data = r.data;
+    });
+  };
+
+  c.performAction = function (action) {
+    c.loading = true;
+    c.data.message = "";
+    c.data.success = false;
+    c.data.error = false;
+    c.server.get({ action: action, sys_id: c.data.visit.sys_id }).then(
+      function (r) {
+        c.data = r.data;
+        c.loading = false;
+      },
+      function () {
+        c.loading = false;
+      }
+    );
+  };
+
+  c.goBack = function () {
+    window.location.href = "?id=x_1085196_visita_0_visits";
+  };
+
+  c.getStatusClass = function (status) {
+    var map = {
+      pending: "label-warning",
+      approved: "label-info",
+      checked_in: "label-success",
+      checked_out: "label-default",
+      cancelled: "label-danger",
+      rejected: "label-danger"
+    };
+    return map[status] || "label-default";
+  };
+
+  c.getStatusLabel = function (status) {
+    var map = {
+      pending: "Pending Approval",
+      approved: "Approved",
+      checked_in: "Checked In",
+      checked_out: "Checked Out",
+      cancelled: "Cancelled",
+      rejected: "Rejected"
+    };
+    return map[status] || status;
+  };
+
+  c.canApprove = function () {
+    return c.data.visit && c.data.visit.status === "pending";
+  };
+  c.canCheckIn = function () {
+    return c.data.visit && c.data.visit.status === "approved";
+  };
+  c.canCheckOut = function () {
+    return c.data.visit && c.data.visit.status === "checked_in";
+  };
+  c.canCancel = function () {
+    return c.data.visit && c.data.visit.status !== "cancelled" && c.data.visit.status !== "checked_out" && c.data.visit.status !== "rejected";
+  };
+};
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>/* Card */
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-large;
+  box-shadow: 0 1px 4px rgba($text-color, 0.07);
+  background: $background-primary;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.sp-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: $background-primary;
+  border-bottom: 1px solid $border-tertiary;
+  min-height: 52px;
+}
+.sp-card-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin: 0;
+}
+.sp-card-icon { margin-right: 8px; color: $brand-primary; font-size: 16px; }
+.sp-card-body { padding: 24px; flex: 1 1 auto; }
+
+/* Section titles */
+.sp-section-title {
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: $text-color;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid $border-tertiary;
+}
+
+/* Description list */
+.sp-dl dt {
+  font-size: $font-size-small;
+  color: $text-muted;
+  font-weight: 500;
+}
+.sp-dl dd {
+  font-size: $font-size-base;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+
+/* Buttons */
+.sp-btn-primary, .sp-btn-secondary, .sp-btn-danger {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: $border-radius-base;
+  font-size: $font-size-base;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+  border: none;
+}
+.sp-btn-primary {
+  background: $brand-primary;
+  color: $btn-primary-color;
+  &amp;:hover:not(:disabled) {
+    background: $brand-primary-dark;
+    box-shadow: 0 2px 8px rgba($brand-primary, 0.3);
+    color: $btn-primary-color;
+  }
+  &amp;:disabled { opacity: 0.55; cursor: not-allowed; }
+}
+.sp-btn-secondary {
+  background: $background-primary;
+  border: 1px solid $border-tertiary;
+  color: $text-color;
+  &amp;:hover { background: $background-secondary; }
+}
+.sp-btn-danger {
+  background: $brand-danger;
+  color: $btn-primary-color;
+  &amp;:hover { background: darken($brand-danger, 8%); }
+}
+.sp-btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* Empty State */
+.sp-empty-state { padding: 64px 24px; }
+.sp-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.35;
+  color: $text-muted;
+}
+.sp-empty-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_visit_detail</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>Visit Detail</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  data.visit = null;
+  data.message = "";
+  data.success = false;
+  data.error = false;
+
+  try {
+    var sysId = "";
+    if (input && input.sys_id) {
+      sysId = input.sys_id;
+    } else {
+      sysId = $sp.getParameter("sys_id");
+    }
+
+    // Handle actions
+    if (input && input.action && sysId) {
+      var actionGr = new GlideRecord("x_1085196_visita_0_visit");
+      if (actionGr.get(sysId)) {
+        if (input.action === "approve" && actionGr.getValue("status") === "pending") {
+          actionGr.setValue("status", "approved");
+          actionGr.update();
+          data.success = true;
+          data.message = "Visit approved successfully.";
+        } else if (input.action === "check_in" && actionGr.getValue("status") === "approved") {
+          actionGr.setValue("status", "checked_in");
+          actionGr.update();
+          data.success = true;
+          data.message = "Visit marked as checked in.";
+        } else if (input.action === "check_out" && actionGr.getValue("status") === "checked_in") {
+          actionGr.setValue("status", "checked_out");
+          actionGr.update();
+          data.success = true;
+          data.message = "Visit marked as checked out.";
+        } else if (input.action === "cancel" && actionGr.getValue("status") !== "cancelled" && actionGr.getValue("status") !== "checked_out" && actionGr.getValue("status") !== "rejected") {
+          actionGr.setValue("status", "cancelled");
+          actionGr.update();
+          data.success = true;
+          data.message = "Visit cancelled.";
+        } else {
+          data.error = true;
+          data.message = "Action not allowed for the current visit status.";
+        }
+      }
+    }
+
+    // Load visit details
+    if (sysId) {
+      var gr = new GlideRecord("x_1085196_visita_0_visit");
+      gr.setLimit(1);
+      if (gr.get(sysId)) {
+        data.visit = {
+          sys_id: gr.getUniqueValue(),
+          number: gr.getValue("number"),
+          visitor_name: gr.getValue("visitor_name"),
+          visitor_email: gr.getValue("visitor_email"),
+          visitor_phone: gr.getValue("visitor_phone"),
+          visitor_company: gr.getValue("visitor_company"),
+          host: gr.getDisplayValue("host") + "",
+          requested_by: gr.getDisplayValue("requested_by") + "",
+          status: gr.getValue("status"),
+          visit_date: gr.getDisplayValue("visit_date") + "",
+          check_in_time: gr.getDisplayValue("check_in_time") + "",
+          check_out_time: gr.getDisplayValue("check_out_time") + "",
+          purpose: gr.getValue("purpose"),
+          notes: gr.getValue("notes")
+        };
+      }
+    }
+  } catch (e) {
+    gs.error("Visit Detail error: " + e.message);
+    data.error = true;
+    data.message = "An error occurred loading visit details.";
+  }
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by/>
+        <sys_created_on/>
+        <sys_id>2084fa5443e44e5393435f2927bcbd6a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visit Detail</sys_name>
+        <sys_package/>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_2084fa5443e44e5393435f2927bcbd6a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 07:26:53</sys_updated_on>
+        <template><![CDATA[<div>
+  <!-- Back Button -->
+  <div class="clearfix" ng-style="{'margin-bottom': '16px'}">
+    <button type="button" class="btn btn-default sp-btn-secondary" ng-click="c.goBack()">
+      <span class="glyphicon glyphicon-arrow-left"></span> Back to Visits
+    </button>
+  </div>
+
+  <!-- Alerts -->
+  <div class="alert alert-success alert-dismissible" ng-if="c.data.success" role="alert">
+    <button type="button" class="close" ng-click="c.data.success=false" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="glyphicon glyphicon-ok-circle"></span>
+    <strong>Success!</strong> {{c.data.message}}
+  </div>
+  <div class="alert alert-danger alert-dismissible" ng-if="c.data.error" role="alert">
+    <button type="button" class="close" ng-click="c.data.error=false" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+    <strong>Error!</strong> {{c.data.message}}
+  </div>
+
+  <!-- Visit Not Found -->
+  <div class="panel panel-default sp-card" ng-if="!c.data.visit">
+    <div class="panel-body sp-card-body">
+      <div class="sp-empty-state text-center">
+        <span class="glyphicon glyphicon-exclamation-sign sp-empty-icon"></span>
+        <h4 class="sp-empty-title">Visit not found</h4>
+        <p class="text-muted">The requested visit could not be found.</p>
+        <button type="button" class="btn btn-primary sp-btn-primary" ng-click="c.goBack()">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Visits
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visit Detail Card -->
+  <div ng-if="c.data.visit">
+    <div class="panel panel-default sp-card">
+      <div class="panel-heading sp-card-header">
+        <h3 class="panel-title sp-card-title">
+          <span class="glyphicon glyphicon-user sp-card-icon"></span>
+          {{c.data.visit.number}} — {{c.data.visit.visitor_name}}
+        </h3>
+        <span class="label" ng-class="c.getStatusClass(c.data.visit.status)">
+          {{c.getStatusLabel(c.data.visit.status)}}
+        </span>
+      </div>
+      <div class="panel-body sp-card-body">
+        <!-- Visitor Info -->
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <h4 class="sp-section-title">Visitor Information</h4>
+            <dl class="dl-horizontal sp-dl">
+              <dt>Name</dt>
+              <dd>{{c.data.visit.visitor_name}}</dd>
+              <dt>Email</dt>
+              <dd>{{c.data.visit.visitor_email || '—'}}</dd>
+              <dt>Phone</dt>
+              <dd>{{c.data.visit.visitor_phone || '—'}}</dd>
+              <dt>Company</dt>
+              <dd>{{c.data.visit.visitor_company || '—'}}</dd>
+            </dl>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <h4 class="sp-section-title">Visit Information</h4>
+            <dl class="dl-horizontal sp-dl">
+              <dt>Host</dt>
+              <dd>{{c.data.visit.host}}</dd>
+              <dt ng-if="c.data.visit.requested_by">Requested By</dt>
+              <dd ng-if="c.data.visit.requested_by">{{c.data.visit.requested_by}}</dd>
+              <dt>Date</dt>
+              <dd>{{c.data.visit.visit_date}}</dd>
+              <dt>Purpose</dt>
+              <dd>{{c.data.visit.purpose || '—'}}</dd>
+              <dt ng-if="c.data.visit.check_in_time">Check-in</dt>
+              <dd ng-if="c.data.visit.check_in_time">{{c.data.visit.check_in_time}}</dd>
+              <dt ng-if="c.data.visit.check_out_time">Check-out</dt>
+              <dd ng-if="c.data.visit.check_out_time">{{c.data.visit.check_out_time}}</dd>
+            </dl>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div ng-if="c.data.visit.notes">
+          <h4 class="sp-section-title">Notes</h4>
+          <p>{{c.data.visit.notes}}</p>
+        </div>
+
+        <!-- Actions -->
+        <div class="sp-btn-group">
+          <button type="button" class="btn btn-primary sp-btn-primary"
+                  ng-if="c.canApprove()"
+                  ng-click="c.performAction('approve')"
+                  ng-disabled="c.loading">
+            <span class="glyphicon glyphicon-ok"></span> Approve
+          </button>
+          <button type="button" class="btn btn-primary sp-btn-primary"
+                  ng-if="c.canCheckIn()"
+                  ng-click="c.performAction('check_in')"
+                  ng-disabled="c.loading">
+            <span class="glyphicon glyphicon-log-in"></span> Check In Visit
+          </button>
+          <button type="button" class="btn btn-default sp-btn-secondary"
+                  ng-if="c.canCheckOut()"
+                  ng-click="c.performAction('check_out')"
+                  ng-disabled="c.loading">
+            <span class="glyphicon glyphicon-log-out"></span> Check Out Visit
+          </button>
+          <button type="button" class="btn btn-danger sp-btn-danger"
+                  ng-if="c.canCancel()"
+                  ng-click="c.performAction('cancel')"
+                  ng-disabled="c.loading">
+            <span class="glyphicon glyphicon-remove"></span> Cancel Visit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>
