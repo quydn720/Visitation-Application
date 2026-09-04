@@ -2,25 +2,25 @@
     <sys_user_role action="INSERT_OR_UPDATE">
         <assignable_by/>
         <can_delegate>true</can_delegate>
-        <description>Can view visit and guest records</description>
+        <description>End user who can submit visit requests via the portal and view their own visits</description>
         <elevated_privilege>false</elevated_privilege>
-        <federated_id>0e/aYbL0YVZd1aaTvcCzX6c3yIuLBxWggzyG9WO7Et0=</federated_id>
+        <federated_id/>
         <grantable>true</grantable>
         <includes_roles/>
-        <name>x_1085196_visita_0.visitor</name>
+        <name>x_1085196_visita_0.end_user</name>
         <scoped_admin>false</scoped_admin>
-        <suffix>visitor</suffix>
+        <suffix>end_user</suffix>
         <sys_class_name>sys_user_role</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2026-09-04 04:07:45</sys_created_on>
-        <sys_id>6ef7a98934a44d729bcaeb3d3ca1da93</sys_id>
+        <sys_created_on>2026-09-04 04:33:27</sys_created_on>
+        <sys_id>06216e1d47d34acaae324f2008ebeafe</sys_id>
         <sys_mod_count>0</sys_mod_count>
-        <sys_name>x_1085196_visita_0.visitor</sys_name>
+        <sys_name>x_1085196_visita_0.end_user</sys_name>
         <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
         <sys_policy/>
         <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
-        <sys_update_name>sys_user_role_6ef7a98934a44d729bcaeb3d3ca1da93</sys_update_name>
+        <sys_update_name>sys_user_role_06216e1d47d34acaae324f2008ebeafe</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-09-04 04:07:45</sys_updated_on>
+        <sys_updated_on>2026-09-04 04:33:27</sys_updated_on>
     </sys_user_role>
 </record_update>

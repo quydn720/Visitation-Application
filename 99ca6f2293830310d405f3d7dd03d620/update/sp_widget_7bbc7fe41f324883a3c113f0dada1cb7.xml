@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function ($scope, $timeout, $window) {
+  var c = this;
+
+  c.submitting = false;
+  c.submitted = false;
+
+  // Visit form data
+  c.visit = {
+    visitor_name: '',
+    visitor_email: '',
+    visitor_phone: '',
+    visitor_company: '',
+    host: '',
+    purpose: '',
+    visit_date: '',
+    notes: ''
+  };
+
+  // Guest list — start with one empty guest
+  c.guests = [
+    { first_name: '', last_name: '', email: '', phone: '', company: '' }
+  ];
+
+  // sn-record-picker config for host field
+  c.hostTable = 'sys_user';
+  c.hostDisplayField = 'name';
+  c.hostSearchFields = 'name,email';
+  c.hostValueField = 'sys_id';
+
+  // Validation errors tracking
+  c.errors = {};
+
+  c.addGuest = function () {
+    c.guests.push({ first_name: '', last_name: '', email: '', phone: '', company: '' });
+  };
+
+  c.removeGuest = function (index) {
+    if (c.guests.length > 1) {
+      c.guests.splice(index, 1);
+    }
+  };
+
+  c.validate = function () {
+    c.errors = {};
+    var valid = true;
+
+    if (!c.visit.visitor_name) {
+      c.errors.visitor_name = 'Visitor name is required.';
+      valid = false;
+    }
+    if (!c.visit.host) {
+      c.errors.host = 'Host is required.';
+      valid = false;
+    }
+    if (!c.visit.visit_date) {
+      c.errors.visit_date = 'Visit date is required.';
+      valid = false;
+    }
+    if (c.guests.length === 0) {
+      c.errors.guests = 'At least one guest is required.';
+      valid = false;
+    }
+    for (var i = 0; i < c.guests.length; i++) {
+      if (!c.guests[i].first_name) {
+        c.errors['guest_first_' + i] = 'First name is required.';
+        valid = false;
+      }
+      if (!c.guests[i].last_name) {
+        c.errors['guest_last_' + i] = 'Last name is required.';
+        valid = false;
+      }
+    }
+
+    return valid;
+  };
+
+  c.submit = function () {
+    if (!c.validate()) {
+      c.data.errorMsg = 'Please correct the errors below before submitting.';
+      return;
+    }
+
+    c.submitting = true;
+    c.data.errorMsg = '';
+
+    c.server.get({
+      action: 'submit',
+      visitData: c.visit,
+      guests: c.guests
+    }).then(function (r) {
+      c.submitting = false;
+      if (r.data.success) {
+        c.submitted = true;
+        c.data.successMsg = r.data.successMsg;
+        c.data.visitNumber = r.data.visitNumber;
+
+        // Redirect to home after 3 seconds
+        $timeout(function () {
+          $window.location.href = '?id=x_1085196_visita_0_home';
+        }, 3000);
+      } else {
+        c.data.errorMsg = r.data.errorMsg || 'An error occurred during submission.';
+      }
+    }, function () {
+      c.submitting = false;
+      c.data.errorMsg = 'Server communication error. Please try again.';
+    });
+  };
+};
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>/* Visit Request Form Widget — using Coral theme variables */
+
+/* Form input styling (from css.md Section 8) */
+.sp-input {
+  height: $input-height-base;
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-base;
+  padding: 0 12px;
+  font-size: $font-size-base;
+  color: $text-color;
+  background: $background-primary;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+  &amp;:focus {
+    border-color: $brand-primary;
+    box-shadow: 0 0 0 3px rgba($brand-primary, 0.15);
+    outline: none;
+  }
+}
+.has-error .sp-input {
+  border-color: $brand-danger;
+}
+
+/* Textarea (from css.md Section 8) */
+.sp-textarea {
+  border-radius: $border-radius-base;
+  border: 1px solid $border-tertiary;
+  padding: 12px;
+  font-size: $font-size-base;
+  color: $text-color;
+  background: $background-primary;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.15s;
+  &amp;:focus {
+    border-color: $brand-primary;
+    box-shadow: 0 0 0 3px rgba($brand-primary, 0.15);
+    outline: none;
+  }
+}
+.has-error .sp-textarea {
+  border-color: $brand-danger;
+}
+
+/* Section title */
+.sp-section-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  .glyphicon {
+    margin-right: 8px;
+    color: $brand-primary;
+    font-size: 16px;
+  }
+}
+
+/* Guest row card */
+.sp-guest-row {
+  background: $background-secondary;
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-base;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.sp-guest-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  strong {
+    font-size: $font-size-base;
+    color: $text-color;
+  }
+}
+
+/* Add guest row */
+.sp-add-guest-row {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+/* Button styles (from css.md Section 9) */
+.sp-btn-primary,
+.sp-btn-secondary {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: $border-radius-base;
+  font-size: $font-size-base;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+  border: none;
+}
+.sp-btn-primary {
+  background: $brand-primary;
+  color: $btn-primary-color;
+  &amp;:hover:not(:disabled) {
+    background: $brand-primary-dark;
+    box-shadow: 0 2px 8px rgba($brand-primary, 0.3);
+    color: $btn-primary-color;
+  }
+  &amp;:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+.sp-btn-secondary {
+  background: $background-primary;
+  border: 1px solid $border-tertiary;
+  color: $text-color;
+  text-decoration: none;
+  &amp;:hover {
+    background: $background-secondary;
+    text-decoration: none;
+    color: $text-color;
+  }
+}
+.sp-btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* Success state */
+.sp-success-state {
+  padding: 64px 24px;
+}
+.sp-success-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Spinner animation (from css.md Section 9) */
+@keyframes sp-spin {
+  to { transform: rotate(360deg); }
+}
+.sp-spin {
+  animation: sp-spin 0.8s linear infinite;
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_visit_request_form</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>Visit Request Form</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  data.success = false;
+  data.errorMsg = '';
+  data.successMsg = '';
+  data.visitNumber = '';
+  data.userName = '';
+
+  // Get current user display name for the form
+  var userGr = new GlideRecord('sys_user');
+  if (userGr.get(gs.getUserID())) {
+    data.userName = userGr.getDisplayValue('name') + '';
+  }
+
+  // Handle form submission
+  if (input && input.action === 'submit') {
+    try {
+      var visitData = input.visitData;
+      var guests = input.guests;
+
+      // Server-side validation
+      if (!visitData.visitor_name || !visitData.host || !visitData.visit_date) {
+        data.errorMsg = 'Please fill in all required fields (Name, Host, Visit Date).';
+        return;
+      }
+      if (!guests || guests.length === 0) {
+        data.errorMsg = 'At least one guest is required.';
+        return;
+      }
+      for (var g = 0; g < guests.length; g++) {
+        if (!guests[g].first_name || !guests[g].last_name) {
+          data.errorMsg = 'Each guest must have a first name and last name.';
+          return;
+        }
+      }
+
+      // Create Visit record using GlideRecord (bypasses ACLs)
+      var visitGr = new GlideRecord('x_1085196_visita_0_visit');
+      visitGr.initialize();
+      visitGr.setValue('visitor_name', visitData.visitor_name);
+      visitGr.setValue('visitor_email', visitData.visitor_email || '');
+      visitGr.setValue('visitor_phone', visitData.visitor_phone || '');
+      visitGr.setValue('visitor_company', visitData.visitor_company || '');
+      visitGr.setValue('host', visitData.host);
+      visitGr.setValue('purpose', visitData.purpose || '');
+      visitGr.setValue('visit_date', visitData.visit_date);
+      visitGr.setValue('notes', visitData.notes || '');
+      visitGr.setValue('requested_by', gs.getUserID());
+      visitGr.setValue('status', 'pending');
+      visitGr.setValue('number_of_guests', guests.length);
+
+      var visitId = visitGr.insert();
+
+      if (!visitId) {
+        data.errorMsg = 'Failed to create visit record. Please try again.';
+        return;
+      }
+
+      // Create Guest records
+      for (var i = 0; i < guests.length; i++) {
+        var guestGr = new GlideRecord('x_1085196_visita_0_guest');
+        guestGr.initialize();
+        guestGr.setValue('visit', visitId);
+        guestGr.setValue('first_name', guests[i].first_name);
+        guestGr.setValue('last_name', guests[i].last_name);
+        guestGr.setValue('email', guests[i].email || '');
+        guestGr.setValue('phone', guests[i].phone || '');
+        guestGr.setValue('company', guests[i].company || '');
+        guestGr.setValue('status', 'pending');
+        guestGr.insert();
+      }
+
+      data.success = true;
+      data.visitNumber = visitGr.getValue('number') + '';
+      data.successMsg = 'Visit request ' + data.visitNumber + ' has been submitted successfully!';
+
+    } catch (e) {
+      gs.error('Visit Request Form error: ' + e.message);
+      data.errorMsg = 'An unexpected error occurred. Please try again.';
+    }
+    return;
+  }
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:33:16</sys_created_on>
+        <sys_id>7bbc7fe41f324883a3c113f0dada1cb7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visit Request Form</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_7bbc7fe41f324883a3c113f0dada1cb7</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:33:16</sys_updated_on>
+        <template><![CDATA[<div>
+  <!-- Success State -->
+  <div ng-if="c.submitted">
+    <div class="panel panel-default">
+      <div class="panel-body text-center sp-success-state">
+        <span class="glyphicon glyphicon-ok-circle text-success sp-success-icon"></span>
+        <h3>Visit Request Submitted!</h3>
+        <p class="text-muted">
+          Your visit request <strong>{{c.data.visitNumber}}</strong> has been submitted successfully and is pending approval.
+        </p>
+        <p class="text-muted">Redirecting to home page in 3 seconds...</p>
+        <a href="?id=x_1085196_visita_0_home" class="btn btn-default">
+          <span class="glyphicon glyphicon-home"></span> Go to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form State -->
+  <div ng-if="!c.submitted">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="glyphicon glyphicon-edit"></span>
+          Submit Visit Request
+        </h3>
+      </div>
+      <div class="panel-body">
+
+        <!-- Error Alert -->
+        <div class="alert alert-danger alert-dismissible" ng-if="c.data.errorMsg" role="alert">
+          <button type="button" class="close" ng-click="c.data.errorMsg=null" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <span class="glyphicon glyphicon-exclamation-sign"></span>
+          <strong>Error!</strong> {{c.data.errorMsg}}
+        </div>
+
+        <!-- Visit Details Section -->
+        <h4 class="sp-section-title">
+          <span class="glyphicon glyphicon-user"></span>
+          Visit Details
+        </h4>
+        <hr/>
+
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group" ng-class="{'has-error': c.errors.visitor_name}">
+              <label class="control-label" for="visitor_name">
+                Visitor Name <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control sp-input" id="visitor_name"
+                     ng-model="c.visit.visitor_name" placeholder="Full name of the visitor" />
+              <span class="help-block text-danger" ng-if="c.errors.visitor_name">{{c.errors.visitor_name}}</span>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+              <label class="control-label" for="visitor_email">Visitor Email</label>
+              <input type="email" class="form-control sp-input" id="visitor_email"
+                     ng-model="c.visit.visitor_email" placeholder="visitor@example.com" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+              <label class="control-label" for="visitor_phone">Visitor Phone</label>
+              <input type="text" class="form-control sp-input" id="visitor_phone"
+                     ng-model="c.visit.visitor_phone" placeholder="Phone number" />
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+              <label class="control-label" for="visitor_company">Visitor Company</label>
+              <input type="text" class="form-control sp-input" id="visitor_company"
+                     ng-model="c.visit.visitor_company" placeholder="Company or organization" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group" ng-class="{'has-error': c.errors.host}">
+              <label class="control-label" for="host_picker">
+                Host <span class="text-danger">*</span>
+              </label>
+              <sn-record-picker
+                field="c.visit.host"
+                table="'sys_user'"
+                display-field="'name'"
+                search-fields="'name,email'"
+                value-field="'sys_id'"
+                placeholder="'Search for a host...'"
+                page-size="10">
+              </sn-record-picker>
+              <span class="help-block text-danger" ng-if="c.errors.host">{{c.errors.host}}</span>
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group" ng-class="{'has-error': c.errors.visit_date}">
+              <label class="control-label" for="visit_date">
+                Visit Date <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control sp-input" id="visit_date"
+                     ng-model="c.visit.visit_date" placeholder="YYYY-MM-DD HH:mm:ss"
+                     sn-datetimepicker />
+              <span class="help-block text-danger" ng-if="c.errors.visit_date">{{c.errors.visit_date}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+              <label class="control-label" for="purpose">Purpose of Visit</label>
+              <input type="text" class="form-control sp-input" id="purpose"
+                     ng-model="c.visit.purpose" placeholder="Meeting, interview, delivery, etc." />
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-12">
+            <div class="form-group">
+              <label class="control-label" for="notes">Notes</label>
+              <textarea class="form-control sp-textarea" id="notes" rows="3"
+                        ng-model="c.visit.notes" placeholder="Any additional notes..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest List Section -->
+        <h4 class="sp-section-title">
+          <span class="glyphicon glyphicon-th-list"></span>
+          Guest List
+          <span class="badge">{{c.guests.length}}</span>
+        </h4>
+        <hr/>
+
+        <div class="alert alert-danger" ng-if="c.errors.guests" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign"></span>
+          {{c.errors.guests}}
+        </div>
+
+        <div class="sp-guest-row" ng-repeat="guest in c.guests track by $index">
+          <div class="sp-guest-header">
+            <strong>Guest {{$index + 1}}</strong>
+            <button type="button" class="btn btn-sm btn-danger" ng-click="c.removeGuest($index)"
+                    ng-disabled="c.guests.length <= 1" title="Remove guest">
+              <span class="glyphicon glyphicon-remove"></span> Remove
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="form-group" ng-class="{'has-error': c.errors['guest_first_' + $index]}">
+                <label class="control-label" for="guest_first_{{$index}}">
+                  First Name <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control sp-input" id="guest_first_{{$index}}"
+                       ng-model="guest.first_name" placeholder="First name" />
+                <span class="help-block text-danger" ng-if="c.errors['guest_first_' + $index]">
+                  {{c.errors['guest_first_' + $index]}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="form-group" ng-class="{'has-error': c.errors['guest_last_' + $index]}">
+                <label class="control-label" for="guest_last_{{$index}}">
+                  Last Name <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control sp-input" id="guest_last_{{$index}}"
+                       ng-model="guest.last_name" placeholder="Last name" />
+                <span class="help-block text-danger" ng-if="c.errors['guest_last_' + $index]">
+                  {{c.errors['guest_last_' + $index]}}
+                </span>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-12">
+              <div class="form-group">
+                <label class="control-label" for="guest_email_{{$index}}">Email</label>
+                <input type="email" class="form-control sp-input" id="guest_email_{{$index}}"
+                       ng-model="guest.email" placeholder="Email" />
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-12">
+              <div class="form-group">
+                <label class="control-label" for="guest_phone_{{$index}}">Phone</label>
+                <input type="text" class="form-control sp-input" id="guest_phone_{{$index}}"
+                       ng-model="guest.phone" placeholder="Phone" />
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-12">
+              <div class="form-group">
+                <label class="control-label" for="guest_company_{{$index}}">Company</label>
+                <input type="text" class="form-control sp-input" id="guest_company_{{$index}}"
+                       ng-model="guest.company" placeholder="Company" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sp-add-guest-row">
+          <button type="button" class="btn btn-default" ng-click="c.addGuest()">
+            <span class="glyphicon glyphicon-plus"></span> Add Guest
+          </button>
+        </div>
+
+        <!-- Submit -->
+        <hr/>
+        <div class="sp-btn-group">
+          <button type="button" class="btn btn-primary sp-btn-primary"
+                  ng-click="c.submit()" ng-disabled="c.submitting">
+            <span class="glyphicon glyphicon-ok" ng-if="!c.submitting"></span>
+            <span class="glyphicon glyphicon-refresh sp-spin" ng-if="c.submitting"></span>
+            {{c.submitting ? 'Submitting...' : 'Submit Visit Request'}}
+          </button>
+          <a href="?id=x_1085196_visita_0_home" class="btn btn-default sp-btn-secondary">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

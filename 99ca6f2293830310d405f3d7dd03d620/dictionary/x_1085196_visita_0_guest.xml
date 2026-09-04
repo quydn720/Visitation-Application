@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
-    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="1fd13c6fa92f412ba8f0bf0e1dbc9941" label="Guest" name="x_1085196_visita_0_guest" type="collection">
+    <element db_object_id="1fd13c6fa92f412ba8f0bf0e1dbc9941" label="Guest" name="x_1085196_visita_0_guest" type="collection">
         <element label="Phone" max_length="40" name="phone" type="string"/>
         <element label="Company" max_length="100" name="company" type="string"/>
+        <element label="Check-in Time" max_length="40" name="check_in_time" type="glide_date_time"/>
+        <element label="Check-out Time" max_length="40" name="check_out_time" type="glide_date_time"/>
+        <element default="pending" label="Status" mandatory="true" max_length="40" name="status" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Pending" sequence="1" value="pending"/>
+                <element inactive_on_update="false" label="Checked Out" sequence="3" value="checked_out"/>
+                <element inactive_on_update="false" label="Checked In" sequence="2" value="checked_in"/>
+            </choice>
+        </element>
         <element label="Last Name" mandatory="true" max_length="80" name="last_name" type="string"/>
         <element label="Email" max_length="255" name="email" type="email"/>
         <element label="Visit" mandatory="true" max_length="32" name="visit" reference="x_1085196_visita_0_visit" type="reference"/>

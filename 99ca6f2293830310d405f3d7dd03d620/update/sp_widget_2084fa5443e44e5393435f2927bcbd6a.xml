@@ -6,6 +6,17 @@
 
   c.loading = false;
 
+  // Listen for guest updates to refresh visit detail
+  $scope.$on("sp.guest.updated", function () {
+    c.refreshVisit();
+  });
+
+  c.refreshVisit = function () {
+    c.server.get({ sys_id: c.data.visit.sys_id }).then(function (r) {
+      c.data = r.data;
+    });
+  };
+
   c.performAction = function (action) {
     c.loading = true;
     c.data.message = "";
@@ -34,18 +45,20 @@
       approved: "label-info",
       checked_in: "label-success",
       checked_out: "label-default",
-      cancelled: "label-danger"
+      cancelled: "label-danger",
+      rejected: "label-danger"
     };
     return map[status] || "label-default";
   };
 
   c.getStatusLabel = function (status) {
     var map = {
-      pending: "Pending",
+      pending: "Pending Approval",
       approved: "Approved",
       checked_in: "Checked In",
       checked_out: "Checked Out",
-      cancelled: "Cancelled"
+      cancelled: "Cancelled",
+      rejected: "Rejected"
     };
     return map[status] || status;
   };
@@ -54,13 +67,13 @@
     return c.data.visit && c.data.visit.status === "pending";
   };
   c.canCheckIn = function () {
-    return c.data.visit && (c.data.visit.status === "approved" || c.data.visit.status === "pending");
+    return c.data.visit && c.data.visit.status === "approved";
   };
   c.canCheckOut = function () {
     return c.data.visit && c.data.visit.status === "checked_in";
   };
   c.canCancel = function () {
-    return c.data.visit && c.data.visit.status !== "cancelled" && c.data.visit.status !== "checked_out";
+    return c.data.visit && c.data.visit.status !== "cancelled" && c.data.visit.status !== "checked_out" && c.data.visit.status !== "rejected";
   };
 };
 ]]></client_script>
@@ -213,17 +226,17 @@
           actionGr.update();
           data.success = true;
           data.message = "Visit approved successfully.";
-        } else if (input.action === "check_in" && (actionGr.getValue("status") === "approved" || actionGr.getValue("status") === "pending")) {
+        } else if (input.action === "check_in" && actionGr.getValue("status") === "approved") {
           actionGr.setValue("status", "checked_in");
           actionGr.update();
           data.success = true;
-          data.message = "Visitor checked in successfully.";
+          data.message = "Visit marked as checked in.";
         } else if (input.action === "check_out" && actionGr.getValue("status") === "checked_in") {
           actionGr.setValue("status", "checked_out");
           actionGr.update();
           data.success = true;
-          data.message = "Visitor checked out successfully.";
-        } else if (input.action === "cancel" && actionGr.getValue("status") !== "cancelled" && actionGr.getValue("status") !== "checked_out") {
+          data.message = "Visit marked as checked out.";
+        } else if (input.action === "cancel" && actionGr.getValue("status") !== "cancelled" && actionGr.getValue("status") !== "checked_out" && actionGr.getValue("status") !== "rejected") {
           actionGr.setValue("status", "cancelled");
           actionGr.update();
           data.success = true;
@@ -248,6 +261,7 @@
           visitor_phone: gr.getValue("visitor_phone"),
           visitor_company: gr.getValue("visitor_company"),
           host: gr.getDisplayValue("host") + "",
+          requested_by: gr.getDisplayValue("requested_by") + "",
           status: gr.getValue("status"),
           visit_date: gr.getDisplayValue("visit_date") + "",
           check_in_time: gr.getDisplayValue("check_in_time") + "",
@@ -349,6 +363,8 @@
             <dl class="dl-horizontal sp-dl">
               <dt>Host</dt>
               <dd>{{c.data.visit.host}}</dd>
+              <dt ng-if="c.data.visit.requested_by">Requested By</dt>
+              <dd ng-if="c.data.visit.requested_by">{{c.data.visit.requested_by}}</dd>
               <dt>Date</dt>
               <dd>{{c.data.visit.visit_date}}</dd>
               <dt>Purpose</dt>
@@ -381,13 +397,13 @@
                   ng-if="c.canCheckIn()"
                   ng-click="c.performAction('check_in')"
                   ng-disabled="c.loading">
-            <span class="glyphicon glyphicon-log-in"></span> Check In
+            <span class="glyphicon glyphicon-log-in"></span> Check In Visit
           </button>
           <button type="button" class="btn btn-default sp-btn-secondary"
                   ng-if="c.canCheckOut()"
                   ng-click="c.performAction('check_out')"
                   ng-disabled="c.loading">
-            <span class="glyphicon glyphicon-log-out"></span> Check Out
+            <span class="glyphicon glyphicon-log-out"></span> Check Out Visit
           </button>
           <button type="button" class="btn btn-danger sp-btn-danger"
                   ng-if="c.canCancel()"
