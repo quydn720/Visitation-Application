@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_dictionary">
+  <sys_dictionary action="INSERT_OR_UPDATE" element="" table="x_1085196_visita_0_visit">
+    <sys_id>5c79590d57474ef487ea655a01874a2c</sys_id>
+    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+    <sys_update_name>sys_dictionary_x_1085196_visita_0_visit_null</sys_update_name>
+    <active>true</active>
+    <attributes/>
+    <audit>false</audit>
+    <element/>
+    <internal_type>collection</internal_type>
+    <name>x_1085196_visita_0_visit</name>
+    <read_only>false</read_only>
+    <text_index>false</text_index>
+  </sys_dictionary>
+</record_update>

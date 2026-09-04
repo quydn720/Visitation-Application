@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_module">
+  <sys_app_module action="INSERT_OR_UPDATE">
+    <sys_id>646e7586329c4305a559588a96ada010</sys_id>
+    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+    <sys_update_name>sys_app_module_646e7586329c4305a559588a96ada010</sys_update_name>
+    <active>true</active>
+    <application>8f212fe419c049d1ac0d76a481207705</application>
+    <hint>View all visits</hint>
+    <link_type>LIST</link_type>
+    <name>x_1085196_visita_0_visit</name>
+    <order>100</order>
+    <title>All Visits</title>
+  </sys_app_module>
+</record_update>

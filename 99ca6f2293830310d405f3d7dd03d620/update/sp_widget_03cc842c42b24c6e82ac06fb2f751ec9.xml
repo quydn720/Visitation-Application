@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+  <sp_widget action="INSERT_OR_UPDATE">
+    <sys_id>03cc842c42b24c6e82ac06fb2f751ec9</sys_id>
+    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+    <sys_update_name>sp_widget_03cc842c42b24c6e82ac06fb2f751ec9</sys_update_name>
+    <category>custom</category>
+    <client_script><![CDATA[api.controller = function ($scope) {
+  var c = this;
+
+  c.loading = false;
+  c.searchQuery = "";
+  c.activeFilter = c.data.activeFilter || "all";
+
+  c.tabs = [
+    { key: "all", label: "All Visits", icon: "glyphicon-list" },
+    { key: "today", label: "Today", icon: "glyphicon-calendar" },
+    { key: "pending", label: "Pending", icon: "glyphicon-time" },
+    { key: "checked_in", label: "Checked In", icon: "glyphicon-log-in" }
+  ];
+
+  c.setFilter = function (filterKey) {
+    c.activeFilter = filterKey;
+    c.loading = true;
+    c.server.get({ action: "filter", filter: filterKey }).then(
+      function (r) {
+        c.data = r.data;
+        c.loading = false;
+      },
+      function () {
+        c.loading = false;
+      }
+    );
+  };
+
+  c.goToDetail = function (sysId) {
+    window.location.href = "?id=x_1085196_visita_0_visit_detail&sys_id=" + sysId;
+  };
+
+  c.getStatusClass = function (status) {
+    var map = {
+      pending: "label-warning",
+      approved: "label-info",
+      checked_in: "label-success",
+      checked_out: "label-default",
+      cancelled: "label-danger"
+    };
+    return map[status] || "label-default";
+  };
+
+  c.getStatusLabel = function (status) {
+    var map = {
+      pending: "Pending",
+      approved: "Approved",
+      checked_in: "Checked In",
+      checked_out: "Checked Out",
+      cancelled: "Cancelled"
+    };
+    return map[status] || status;
+  };
+};
+]]></client_script>
+    <controller_as>c</controller_as>
+    <css><![CDATA[/* Card */
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-large;
+  box-shadow: 0 1px 4px rgba($text-color, 0.07);
+  background: $background-primary;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.sp-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: $background-primary;
+  border-bottom: 1px solid $border-tertiary;
+  min-height: 52px;
+}
+.sp-card-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin: 0;
+}
+.sp-card-icon { margin-right: 8px; color: $brand-primary; font-size: 16px; }
+.sp-card-body-flush { padding: 0; flex: 1 1 auto; overflow: hidden; }
+.sp-card-body { padding: 24px; flex: 1 1 auto; }
+
+/* Tabs */
+.sp-tabs-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid $border-tertiary;
+  background: $background-secondary;
+  padding: 0 16px;
+  overflow-x: auto;
+}
+.sp-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  font-size: $font-size-base;
+  font-weight: 500;
+  color: $text-muted;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+  &:hover {
+    color: $text-color;
+  }
+}
+.sp-tab-active {
+  color: $brand-primary;
+  border-bottom-color: $brand-primary;
+  font-weight: 600;
+}
+
+/* Toolbar */
+.sp-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid $border-tertiary;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sp-search-box { position: relative; }
+.sp-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $text-muted;
+  font-size: 12px;
+}
+.sp-search-input {
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-base;
+  height: 44px;
+  width: 280px;
+  padding: 0 10px 0 30px;
+  font-size: $font-size-small;
+  background: $background-primary;
+  color: $text-color;
+  &:focus {
+    border-color: $brand-primary;
+    outline: none;
+  }
+}
+
+/* Table */
+.sp-th {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px;
+  border-bottom: 2px solid $border-tertiary;
+  background: $background-secondary;
+}
+.sp-td {
+  font-size: $font-size-small;
+  padding: 12px 16px;
+  color: $text-color;
+  border-bottom: 1px solid $border-tertiary;
+  vertical-align: middle;
+}
+.sp-clickable-row {
+  cursor: pointer;
+  &:hover { background: $background-secondary; }
+}
+
+/* Loading */
+.sp-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  color: $text-muted;
+}
+.sp-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid $border-tertiary;
+  border-top-color: $brand-primary;
+  border-radius: 50%;
+  animation: sp-spin 0.7s linear infinite;
+  margin-bottom: 12px;
+}
+.sp-loader-text { font-size: $font-size-small; color: $text-muted; }
+@keyframes sp-spin { to { transform: rotate(360deg); } }
+
+/* Empty State */
+.sp-empty-state { padding: 64px 24px; }
+.sp-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.35;
+  color: $text-muted;
+}
+.sp-empty-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+]]></css>
+    <data_table>sp_instance</data_table>
+    <demo_data/>
+    <description/>
+    <docs/>
+    <field_list/>
+    <has_preview>false</has_preview>
+    <id>x_1085196_visita_0_visit_list</id>
+    <internal>false</internal>
+    <link>function link(scope, element, attrs, controller) {
+}</link>
+    <name>Visit List</name>
+    <option_schema/>
+    <public>false</public>
+    <roles/>
+    <script><![CDATA[(function () {
+  data.visits = [];
+  data.message = "";
+  data.activeFilter = "all";
+
+  try {
+    // Get filter from URL or input
+    var filter = "";
+    if (input && input.action === "filter") {
+      filter = input.filter || "all";
+    } else {
+      filter = $sp.getParameter("filter") || "all";
+    }
+    data.activeFilter = filter;
+
+    var gr = new GlideRecord("x_1085196_visita_0_visit");
+
+    if (filter === "today") {
+      var today = new GlideDate();
+      var todayStr = today.getByFormat("yyyy-MM-dd");
+      gr.addQuery("visit_date", todayStr);
+    } else if (filter === "pending") {
+      gr.addQuery("status", "pending");
+    } else if (filter === "checked_in") {
+      gr.addQuery("status", "checked_in");
+    } else if (filter === "approved") {
+      gr.addQuery("status", "approved");
+    }
+    // "all" = no filter
+
+    gr.orderByDesc("visit_date");
+    gr.orderByDesc("sys_created_on");
+    gr.setLimit(100);
+    gr.query();
+
+    while (gr.next()) {
+      data.visits.push({
+        sys_id: gr.getUniqueValue(),
+        number: gr.getValue("number"),
+        visitor_name: gr.getValue("visitor_name"),
+        visitor_email: gr.getValue("visitor_email"),
+        visitor_company: gr.getValue("visitor_company"),
+        host: gr.getDisplayValue("host") + "",
+        status: gr.getValue("status"),
+        visit_date: gr.getDisplayValue("visit_date") + "",
+        purpose: gr.getValue("purpose"),
+        number_of_guests: gr.getValue("number_of_guests")
+      });
+    }
+  } catch (e) {
+    gs.error("Visit List widget error: " + e.message);
+    data.message = "An error occurred loading visits.";
+  }
+})();
+]]></script>
+    <servicenow>false</servicenow>
+    <template><![CDATA[<div>
+  <div class="panel panel-default sp-card">
+    <div class="panel-heading sp-card-header">
+      <h3 class="panel-title sp-card-title">
+        <span class="glyphicon glyphicon-list-alt sp-card-icon"></span>
+        Visits
+      </h3>
+    </div>
+
+    <!-- Tabs -->
+    <div class="sp-tabs-bar">
+      <button type="button"
+              ng-repeat="tab in c.tabs track by tab.key"
+              class="sp-tab-btn"
+              ng-class="{'sp-tab-active': c.activeFilter === tab.key}"
+              ng-click="c.setFilter(tab.key)">
+        <span class="glyphicon {{tab.icon}}"></span>
+        {{tab.label}}
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="sp-table-toolbar">
+      <div class="sp-search-box">
+        <span class="glyphicon glyphicon-search sp-search-icon"></span>
+        <input type="text" class="sp-search-input" ng-model="c.searchQuery"
+               placeholder="Search by visitor, host, number..." />
+      </div>
+      <span class="text-muted">{{(c.data.visits | filter:c.searchQuery).length}} visit(s)</span>
+    </div>
+
+    <!-- Loading -->
+    <div class="sp-loader" ng-if="c.loading">
+      <div class="sp-spinner"></div>
+      <p class="sp-loader-text">Loading visits...</p>
+    </div>
+
+    <!-- Table -->
+    <div class="panel-body sp-card-body-flush" ng-if="!c.loading && c.data.visits.length > 0">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="sp-th">Number</th>
+            <th class="sp-th">Visitor</th>
+            <th class="sp-th hidden-xs">Company</th>
+            <th class="sp-th">Host</th>
+            <th class="sp-th hidden-xs">Date</th>
+            <th class="sp-th">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="sp-clickable-row"
+              ng-repeat="visit in c.data.visits | filter:c.searchQuery track by visit.sys_id"
+              ng-click="c.goToDetail(visit.sys_id)">
+            <td class="sp-td"><strong>{{visit.number}}</strong></td>
+            <td class="sp-td">{{visit.visitor_name}}</td>
+            <td class="sp-td hidden-xs">{{visit.visitor_company}}</td>
+            <td class="sp-td">{{visit.host}}</td>
+            <td class="sp-td hidden-xs">{{visit.visit_date}}</td>
+            <td class="sp-td">
+              <span class="label" ng-class="c.getStatusClass(visit.status)">
+                {{c.getStatusLabel(visit.status)}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div class="panel-body sp-card-body" ng-if="!c.loading && c.data.visits.length === 0">
+      <div class="sp-empty-state text-center">
+        <span class="glyphicon glyphicon-inbox sp-empty-icon"></span>
+        <h4 class="sp-empty-title">No visits found</h4>
+        <p class="text-muted">No visits match the current filter.</p>
+      </div>
+    </div>
+  </div>
+</div>
+]]></template>
+  </sp_widget>
+</record_update>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_page">
+  <sp_page action="INSERT_OR_UPDATE">
+    <sys_id>483eb178f5cc4c89aae75107ef2d03fd</sys_id>
+    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+    <sys_update_name>sp_page_483eb178f5cc4c89aae75107ef2d03fd</sys_update_name>
+    <category>custom</category>
+    <css/>
+    <draft>false</draft>
+    <dynamic_title_structure/>
+    <human_readable_url_structure/>
+    <id>x_1085196_visita_0_visit_detail</id>
+    <internal>false</internal>
+    <omit_watcher>false</omit_watcher>
+    <public>false</public>
+    <roles/>
+    <seo_script/>
+    <short_description/>
+    <title>Visit Detail</title>
+    <use_seo_script>false</use_seo_script>
+  </sp_page>
+</record_update>

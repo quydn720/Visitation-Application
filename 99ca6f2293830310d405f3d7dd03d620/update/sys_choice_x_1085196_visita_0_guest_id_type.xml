@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+  <sys_choice_set action="INSERT_OR_UPDATE" field="id_type" table="x_1085196_visita_0_guest" version="3">
+    <sys_choice_set action="INSERT_OR_UPDATE">
+      <sys_id>905571430be849f9ace7176302bac3be</sys_id>
+      <element>id_type</element>
+      <name>x_1085196_visita_0_guest</name>
+      <sys_class_name>sys_choice_set</sys_class_name>
+      <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+      <sys_package display_value="x_1085196_visita_0" source="99ca6f2293830310d405f3d7dd03d620">99ca6f2293830310d405f3d7dd03d620</sys_package>
+      <sys_update_name>sys_choice_x_1085196_visita_0_guest_id_type</sys_update_name>
+      <sys_name>id_type</sys_name>
+    </sys_choice_set>
+    <sys_choice action="INSERT_OR_UPDATE">
+      <sys_id>a0675d724049408fa107469a63b6d001</sys_id>
+      <name>x_1085196_visita_0_guest</name>
+      <element>id_type</element>
+      <label>Driver's License</label>
+      <value>drivers_license</value>
+      <sequence>1</sequence>
+      <language>en</language>
+    </sys_choice>
+    <sys_choice action="INSERT_OR_UPDATE">
+      <sys_id>f7501a46bd80484fb4fb33d897f7c9b1</sys_id>
+      <name>x_1085196_visita_0_guest</name>
+      <element>id_type</element>
+      <label>Passport</label>
+      <value>passport</value>
+      <sequence>2</sequence>
+      <language>en</language>
+    </sys_choice>
+    <sys_choice action="INSERT_OR_UPDATE">
+      <sys_id>d8dae98d3cd94ed1b284e0b5d098aa4a</sys_id>
+      <name>x_1085196_visita_0_guest</name>
+      <element>id_type</element>
+      <label>National ID</label>
+      <value>national_id</value>
+      <sequence>3</sequence>
+      <language>en</language>
+    </sys_choice>
+    <sys_choice action="INSERT_OR_UPDATE">
+      <sys_id>fbcd406d7a074d5096ad96ba8ccd849c</sys_id>
+      <name>x_1085196_visita_0_guest</name>
+      <element>id_type</element>
+      <label>Other</label>
+      <value>other</value>
+      <sequence>4</sequence>
+      <language>en</language>
+    </sys_choice>
+  </sys_choice_set>
+</record_update>

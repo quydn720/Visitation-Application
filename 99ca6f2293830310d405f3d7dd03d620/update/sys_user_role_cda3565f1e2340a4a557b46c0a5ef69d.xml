@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role">
+  <sys_user_role action="INSERT_OR_UPDATE">
+    <sys_id>cda3565f1e2340a4a557b46c0a5ef69d</sys_id>
+    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+    <sys_update_name>sys_user_role_cda3565f1e2340a4a557b46c0a5ef69d</sys_update_name>
+    <assignable_by/>
+    <can_delegate>true</can_delegate>
+    <description>Receptionist / agent who manages, checks in, and checks out visits</description>
+    <elevated_privilege>false</elevated_privilege>
+    <grantable>true</grantable>
+    <name>x_1085196_visita_0.receptionist</name>
+    <scoped_admin>false</scoped_admin>
+    <suffix>receptionist</suffix>
+  </sys_user_role>
+</record_update>

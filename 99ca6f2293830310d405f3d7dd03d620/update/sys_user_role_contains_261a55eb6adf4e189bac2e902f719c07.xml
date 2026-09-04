@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role_contains">
+  <sys_user_role_contains action="INSERT_OR_UPDATE">
+    <sys_id>261a55eb6adf4e189bac2e902f719c07</sys_id>
+    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+    <sys_update_name>sys_user_role_contains_261a55eb6adf4e189bac2e902f719c07</sys_update_name>
+    <contains name="x_1085196_visita_0.visitor">6ef7a98934a44d729bcaeb3d3ca1da93</contains>
+    <role name="x_1085196_visita_0.receptionist">cda3565f1e2340a4a557b46c0a5ef69d</role>
+  </sys_user_role_contains>
+</record_update>

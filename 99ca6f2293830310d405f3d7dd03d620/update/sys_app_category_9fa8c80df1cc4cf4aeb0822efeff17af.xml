@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app_category">
+  <sys_app_category action="INSERT_OR_UPDATE">
+    <sys_id>9fa8c80df1cc4cf4aeb0822efeff17af</sys_id>
+    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+    <sys_update_name>sys_app_category_9fa8c80df1cc4cf4aeb0822efeff17af</sys_update_name>
+    <name>Visitation</name>
+    <style>border-color: #6554c0; background-color: #ede7f6;</style>
+  </sys_app_category>
+</record_update>
