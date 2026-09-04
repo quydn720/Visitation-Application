@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="1fd13c6fa92f412ba8f0bf0e1dbc9941" label="Guest" name="x_1085196_visita_0_guest" type="collection">
+        <element label="Phone" max_length="40" name="phone" type="string"/>
+        <element label="Company" max_length="100" name="company" type="string"/>
+        <element label="Last Name" mandatory="true" max_length="80" name="last_name" type="string"/>
+        <element label="Email" max_length="255" name="email" type="email"/>
+        <element label="Visit" mandatory="true" max_length="32" name="visit" reference="x_1085196_visita_0_visit" type="reference"/>
+        <element label="ID Number" max_length="60" name="id_number" type="string"/>
+        <element label="ID Type" max_length="40" name="id_type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Driver's License" sequence="1" value="drivers_license"/>
+                <element inactive_on_update="false" label="National ID" sequence="3" value="national_id"/>
+                <element inactive_on_update="false" label="Passport" sequence="2" value="passport"/>
+                <element inactive_on_update="false" label="Other" sequence="4" value="other"/>
+            </choice>
+        </element>
+        <element display="true" label="First Name" mandatory="true" max_length="80" name="first_name" type="string"/>
+        <index name="index">
+            <element name="visit"/>
+        </index>
+    </element>
+</database>

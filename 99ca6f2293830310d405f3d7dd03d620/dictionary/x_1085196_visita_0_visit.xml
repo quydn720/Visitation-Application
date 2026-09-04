@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element attributes="enforce_dot_walk_cross_scope_access=true" db_object_id="f38c87b2805743cbb67aa775acbab266" label="Visit" name="x_1085196_visita_0_visit" type="collection">
+        <element label="Check-out Time" max_length="40" name="check_out_time" type="glide_date_time"/>
+        <element label="Number" max_length="40" name="number" read_only="true" read_only_option="instance_configured" type="string"/>
+        <element label="Visit Date" mandatory="true" max_length="40" name="visit_date" type="glide_date_time"/>
+        <element label="Visitor Company" max_length="100" name="visitor_company" type="string"/>
+        <element default="1" label="Number of Guests" mandatory="true" max_length="40" name="number_of_guests" type="integer"/>
+        <element display="true" label="Visitor Name" mandatory="true" max_length="100" name="visitor_name" type="string"/>
+        <element label="Host" mandatory="true" max_length="32" name="host" reference="sys_user" type="reference"/>
+        <element label="Check-in Time" max_length="40" name="check_in_time" type="glide_date_time"/>
+        <element default="pending" label="Status" mandatory="true" max_length="40" name="status" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Pending" sequence="1" value="pending"/>
+                <element inactive_on_update="false" label="Checked In" sequence="3" value="checked_in"/>
+                <element inactive_on_update="false" label="Checked Out" sequence="4" value="checked_out"/>
+                <element inactive_on_update="false" label="Approved" sequence="2" value="approved"/>
+                <element inactive_on_update="false" label="Cancelled" sequence="5" value="cancelled"/>
+            </choice>
+        </element>
+        <element label="Purpose of Visit" max_length="200" name="purpose" type="string"/>
+        <element label="Visitor Email" max_length="255" name="visitor_email" type="email"/>
+        <element label="Notes" max_length="4000" name="notes" type="multi_two_lines"/>
+        <element label="Visitor Phone" max_length="40" name="visitor_phone" type="string"/>
+        <index name="index">
+            <element name="host"/>
+        </index>
+    </element>
+</database>

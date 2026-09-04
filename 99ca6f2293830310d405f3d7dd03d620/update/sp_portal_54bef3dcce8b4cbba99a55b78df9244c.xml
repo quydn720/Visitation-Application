@@ -1,40 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_portal">
-  <sp_portal action="INSERT_OR_UPDATE">
-    <sys_id>54bef3dcce8b4cbba99a55b78df9244c</sys_id>
-    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
-    <sys_update_name>sp_portal_54bef3dcce8b4cbba99a55b78df9244c</sys_update_name>
-    <alternate_portal/>
-    <communication_channels/>
-    <css_variables/>
-    <dark_theme/>
-    <default>false</default>
-    <embeddable_macroponents/>
-    <enable_ais>false</enable_ais>
-    <enable_certificate_based_authentication>false</enable_certificate_based_authentication>
-    <enable_embeddables>false</enable_embeddables>
-    <enable_favorites>false</enable_favorites>
-    <hide_portal_name>false</hide_portal_name>
-    <homepage id="x_1085196_visita_0_home">283b2c2892ef49b281a3580d3732aa53</homepage>
-    <icon/>
-    <inactive>false</inactive>
-    <kb_knowledge_base/>
-    <kb_knowledge_page/>
-    <login_page>6995a144cb11120000f8d856634c9c25</login_page>
-    <logo/>
-    <logo_alt_text/>
-    <notfound_page>3c2c9063cb11020000f8d856634c9c1f</notfound_page>
-    <quick_start_config/>
-    <rtl_enabled>false</rtl_enabled>
-    <sc_catalog/>
-    <sc_catalog_page/>
-    <sc_category_page/>
-    <search_application/>
-    <search_results_configuration/>
-    <sp_chat_queue/>
-    <sp_rectangle_menu>a624f94314464c338cb44154abbb7a5d</sp_rectangle_menu>
-    <theme>281507c44317d210ca4c1f425db8f2fd</theme>
-    <title>Visitation Portal</title>
-    <ts_index_group/>
-    <url_suffix>x_1085196_visita_0_visitation</url_suffix>
-  </sp_portal>
+    <sp_portal action="INSERT_OR_UPDATE">
+        <alternate_portal/>
+        <communication_channels/>
+        <css_variables/>
+        <dark_theme/>
+        <default>false</default>
+        <embeddable_macroponents/>
+        <enable_ais>false</enable_ais>
+        <enable_certificate_based_authentication>false</enable_certificate_based_authentication>
+        <enable_embeddables>false</enable_embeddables>
+        <enable_favorites>false</enable_favorites>
+        <hide_portal_name>false</hide_portal_name>
+        <homepage display_value="x_1085196_visita_0_home">283b2c2892ef49b281a3580d3732aa53</homepage>
+        <icon/>
+        <inactive>false</inactive>
+        <kb_knowledge_base/>
+        <kb_knowledge_page/>
+        <login_page display_value="login">6995a144cb11120000f8d856634c9c25</login_page>
+        <logo/>
+        <logo_alt_text/>
+        <notfound_page display_value="404">3c2c9063cb11020000f8d856634c9c1f</notfound_page>
+        <quick_start_config/>
+        <rtl_enabled>false</rtl_enabled>
+        <sc_catalog/>
+        <sc_catalog_page/>
+        <sc_category_page/>
+        <search_application/>
+        <search_results_configuration/>
+        <sp_chat_queue/>
+        <sp_rectangle_menu display_value="Visitation Menu">a624f94314464c338cb44154abbb7a5d</sp_rectangle_menu>
+        <sys_class_name>sp_portal</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:30</sys_created_on>
+        <sys_id>54bef3dcce8b4cbba99a55b78df9244c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visitation Portal</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_portal_54bef3dcce8b4cbba99a55b78df9244c</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:30</sys_updated_on>
+        <theme display_value="Coral">281507c44317d210ca4c1f425db8f2fd</theme>
+        <title>Visitation Portal</title>
+        <ts_index_group/>
+        <url_suffix>x_1085196_visita_0_visitation</url_suffix>
+    </sp_portal>
+    <sys_translated_text action="delete_multiple" query="documentkey=54bef3dcce8b4cbba99a55b78df9244c"/>
 </record_update>

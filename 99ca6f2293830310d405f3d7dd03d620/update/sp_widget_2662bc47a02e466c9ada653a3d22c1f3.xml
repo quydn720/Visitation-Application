@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
-  <sp_widget action="INSERT_OR_UPDATE">
-    <sys_id>2662bc47a02e466c9ada653a3d22c1f3</sys_id>
-    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
-    <sys_update_name>sp_widget_2662bc47a02e466c9ada653a3d22c1f3</sys_update_name>
-    <category>custom</category>
-    <client_script><![CDATA[api.controller = function () {
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function () {
   var c = this;
 
   c.navigateTo = function (pageId, params) {
@@ -48,15 +45,15 @@
   };
 };
 ]]></client_script>
-    <controller_as>c</controller_as>
-    <css><![CDATA[/* Hero */
+        <controller_as>c</controller_as>
+        <css>/* Hero */
 .sp-hero {
   background: linear-gradient(135deg, lighten($brand-primary, 30%) 0%, lighten($brand-primary, 15%) 50%, $brand-primary 100%);
   border-radius: $border-radius-large;
   margin-bottom: 24px;
   overflow: hidden;
   position: relative;
-  &::after {
+  &amp;::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -103,7 +100,7 @@
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   transition: background 0.15s;
-  &:hover {
+  &amp;:hover {
     background: $btn-primary-color;
   }
 }
@@ -113,7 +110,7 @@
   display: flex;
   flex-wrap: wrap;
 }
-.sp-card-grid > [class*="col-"] {
+.sp-card-grid &gt; [class*="col-"] {
   display: flex;
   margin-bottom: 24px;
 }
@@ -129,7 +126,7 @@
   box-shadow: 0 1px 3px rgba($text-color, 0.06);
   cursor: pointer;
   transition: box-shadow 0.15s, border-color 0.15s;
-  &:hover {
+  &amp;:hover {
     box-shadow: 0 2px 8px rgba($text-color, 0.12);
     border-color: $brand-primary;
   }
@@ -216,7 +213,7 @@
 }
 .sp-clickable-row {
   cursor: pointer;
-  &:hover { background: $background-secondary; }
+  &amp;:hover { background: $background-secondary; }
 }
 
 /* Empty State */
@@ -234,22 +231,22 @@
   color: $text-color;
   margin-bottom: 8px;
 }
-]]></css>
-    <data_table>sp_instance</data_table>
-    <demo_data/>
-    <description/>
-    <docs/>
-    <field_list/>
-    <has_preview>false</has_preview>
-    <id>x_1085196_visita_0_dashboard</id>
-    <internal>false</internal>
-    <link>function link(scope, element, attrs, controller) {
-}</link>
-    <name>Visitation Dashboard</name>
-    <option_schema/>
-    <public>false</public>
-    <roles/>
-    <script><![CDATA[(function () {
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_dashboard</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>Visitation Dashboard</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
   data.stats = {
     today_total: 0,
     pending: 0,
@@ -311,8 +308,20 @@
   }
 })();
 ]]></script>
-    <servicenow>false</servicenow>
-    <template><![CDATA[<div>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:31</sys_created_on>
+        <sys_id>2662bc47a02e466c9ada653a3d22c1f3</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visitation Dashboard</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_2662bc47a02e466c9ada653a3d22c1f3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:31</sys_updated_on>
+        <template><![CDATA[<div>
   <!-- Hero Section -->
   <div class="sp-hero">
     <div class="sp-hero-inner">
@@ -425,5 +434,5 @@
   </div>
 </div>
 ]]></template>
-  </sp_widget>
+    </sp_widget>
 </record_update>

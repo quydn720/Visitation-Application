@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
-  <sp_widget action="INSERT_OR_UPDATE">
-    <sys_id>03cc842c42b24c6e82ac06fb2f751ec9</sys_id>
-    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
-    <sys_update_name>sp_widget_03cc842c42b24c6e82ac06fb2f751ec9</sys_update_name>
-    <category>custom</category>
-    <client_script><![CDATA[api.controller = function ($scope) {
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function ($scope) {
   var c = this;
 
   c.loading = false;
@@ -59,8 +56,8 @@
   };
 };
 ]]></client_script>
-    <controller_as>c</controller_as>
-    <css><![CDATA[/* Card */
+        <controller_as>c</controller_as>
+        <css>/* Card */
 .sp-card {
   display: flex;
   flex-direction: column;
@@ -115,7 +112,7 @@
   gap: 6px;
   margin-bottom: -2px;
   transition: color 0.15s, border-color 0.15s;
-  &:hover {
+  &amp;:hover {
     color: $text-color;
   }
 }
@@ -153,7 +150,7 @@
   font-size: $font-size-small;
   background: $background-primary;
   color: $text-color;
-  &:focus {
+  &amp;:focus {
     border-color: $brand-primary;
     outline: none;
   }
@@ -179,7 +176,7 @@
 }
 .sp-clickable-row {
   cursor: pointer;
-  &:hover { background: $background-secondary; }
+  &amp;:hover { background: $background-secondary; }
 }
 
 /* Loading */
@@ -218,22 +215,22 @@
   color: $text-color;
   margin-bottom: 8px;
 }
-]]></css>
-    <data_table>sp_instance</data_table>
-    <demo_data/>
-    <description/>
-    <docs/>
-    <field_list/>
-    <has_preview>false</has_preview>
-    <id>x_1085196_visita_0_visit_list</id>
-    <internal>false</internal>
-    <link>function link(scope, element, attrs, controller) {
-}</link>
-    <name>Visit List</name>
-    <option_schema/>
-    <public>false</public>
-    <roles/>
-    <script><![CDATA[(function () {
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_visit_list</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>Visit List</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
   data.visits = [];
   data.message = "";
   data.activeFilter = "all";
@@ -288,8 +285,20 @@
   }
 })();
 ]]></script>
-    <servicenow>false</servicenow>
-    <template><![CDATA[<div>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:31</sys_created_on>
+        <sys_id>03cc842c42b24c6e82ac06fb2f751ec9</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visit List</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_03cc842c42b24c6e82ac06fb2f751ec9</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:31</sys_updated_on>
+        <template><![CDATA[<div>
   <div class="panel panel-default sp-card">
     <div class="panel-heading sp-card-header">
       <h3 class="panel-title sp-card-title">
@@ -369,5 +378,5 @@
   </div>
 </div>
 ]]></template>
-  </sp_widget>
+    </sp_widget>
 </record_update>

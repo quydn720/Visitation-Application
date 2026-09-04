@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
-  <sp_widget action="INSERT_OR_UPDATE">
-    <sys_id>2084fa5443e44e5393435f2927bcbd6a</sys_id>
-    <sys_scope display_value="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_scope>
-    <sys_update_name>sp_widget_2084fa5443e44e5393435f2927bcbd6a</sys_update_name>
-    <category>custom</category>
-    <client_script><![CDATA[api.controller = function ($scope, $rootScope) {
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function ($scope, $rootScope) {
   var c = this;
 
   c.loading = false;
@@ -67,8 +64,8 @@
   };
 };
 ]]></client_script>
-    <controller_as>c</controller_as>
-    <css><![CDATA[/* Card */
+        <controller_as>c</controller_as>
+        <css>/* Card */
 .sp-card {
   display: flex;
   flex-direction: column;
@@ -137,23 +134,23 @@
 .sp-btn-primary {
   background: $brand-primary;
   color: $btn-primary-color;
-  &:hover:not(:disabled) {
+  &amp;:hover:not(:disabled) {
     background: $brand-primary-dark;
     box-shadow: 0 2px 8px rgba($brand-primary, 0.3);
     color: $btn-primary-color;
   }
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
+  &amp;:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 .sp-btn-secondary {
   background: $background-primary;
   border: 1px solid $border-tertiary;
   color: $text-color;
-  &:hover { background: $background-secondary; }
+  &amp;:hover { background: $background-secondary; }
 }
 .sp-btn-danger {
   background: $brand-danger;
   color: $btn-primary-color;
-  &:hover { background: darken($brand-danger, 8%); }
+  &amp;:hover { background: darken($brand-danger, 8%); }
 }
 .sp-btn-group {
   display: flex;
@@ -178,22 +175,22 @@
   color: $text-color;
   margin-bottom: 8px;
 }
-]]></css>
-    <data_table>sp_instance</data_table>
-    <demo_data/>
-    <description/>
-    <docs/>
-    <field_list/>
-    <has_preview>false</has_preview>
-    <id>x_1085196_visita_0_visit_detail</id>
-    <internal>false</internal>
-    <link>function link(scope, element, attrs, controller) {
-}</link>
-    <name>Visit Detail</name>
-    <option_schema/>
-    <public>false</public>
-    <roles/>
-    <script><![CDATA[(function () {
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_visit_detail</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>Visit Detail</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
   data.visit = null;
   data.message = "";
   data.success = false;
@@ -268,8 +265,20 @@
   }
 })();
 ]]></script>
-    <servicenow>false</servicenow>
-    <template><![CDATA[<div>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:31</sys_created_on>
+        <sys_id>2084fa5443e44e5393435f2927bcbd6a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visit Detail</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_2084fa5443e44e5393435f2927bcbd6a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:31</sys_updated_on>
+        <template><![CDATA[<div>
   <!-- Back Button -->
   <div class="clearfix" ng-style="{'margin-bottom': '16px'}">
     <button type="button" class="btn btn-default sp-btn-secondary" ng-click="c.goBack()">
@@ -392,5 +401,5 @@
   </div>
 </div>
 ]]></template>
-  </sp_widget>
+    </sp_widget>
 </record_update>
