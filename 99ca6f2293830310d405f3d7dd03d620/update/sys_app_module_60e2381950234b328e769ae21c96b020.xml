@@ -13,7 +13,7 @@
         <mobile_title/>
         <mobile_view_name/>
         <name/>
-        <order>900</order>
+        <order>700</order>
         <override_menu_roles>false</override_menu_roles>
         <query>x_1085196_visita_0_visit_dashboard.do</query>
         <report/>

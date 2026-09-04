@@ -10,6 +10,7 @@
 
   c.tabs = [
     { key: "all", label: "All Visits", icon: "glyphicon-list" },
+    { key: "future", label: "Future", icon: "glyphicon-forward" },
     { key: "today", label: "Today", icon: "glyphicon-calendar" },
     { key: "pending", label: "Pending", icon: "glyphicon-time" },
     { key: "checked_in", label: "Checked In", icon: "glyphicon-log-in" }
@@ -39,7 +40,8 @@
       approved: "label-info",
       checked_in: "label-success",
       checked_out: "label-default",
-      cancelled: "label-danger"
+      cancelled: "label-danger",
+      rejected: "label-danger"
     };
     return map[status] || "label-default";
   };
@@ -50,7 +52,8 @@
       approved: "Approved",
       checked_in: "Checked In",
       checked_out: "Checked Out",
-      cancelled: "Cancelled"
+      cancelled: "Cancelled",
+      rejected: "Rejected"
     };
     return map[status] || status;
   };
@@ -236,12 +239,12 @@
   data.activeFilter = "all";
 
   try {
-    // Get filter from URL or input
+    // Get filter from input (tab click), URL param, or widget option default
     var filter = "";
     if (input && input.action === "filter") {
       filter = input.filter || "all";
     } else {
-      filter = $sp.getParameter("filter") || "all";
+      filter = $sp.getParameter("filter") || (options && options.default_filter) || "all";
     }
     data.activeFilter = filter;
 
@@ -251,6 +254,8 @@
       var today = new GlideDate();
       var todayStr = today.getByFormat("yyyy-MM-dd");
       gr.addQuery("visit_date", todayStr);
+    } else if (filter === "future") {
+      gr.addQuery("visit_date", ">=", new GlideDateTime().getValue());
     } else if (filter === "pending") {
       gr.addQuery("status", "pending");
     } else if (filter === "checked_in") {
@@ -287,17 +292,17 @@
 ]]></script>
         <servicenow>false</servicenow>
         <sys_class_name>sp_widget</sys_class_name>
-        <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2026-09-04 04:07:31</sys_created_on>
+        <sys_created_by/>
+        <sys_created_on/>
         <sys_id>03cc842c42b24c6e82ac06fb2f751ec9</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>Visit List</sys_name>
-        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_package/>
         <sys_policy/>
         <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
         <sys_update_name>sp_widget_03cc842c42b24c6e82ac06fb2f751ec9</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-09-04 04:07:31</sys_updated_on>
+        <sys_updated_on>2026-09-04 07:22:47</sys_updated_on>
         <template><![CDATA[<div>
   <div class="panel panel-default sp-card">
     <div class="panel-heading sp-card-header">

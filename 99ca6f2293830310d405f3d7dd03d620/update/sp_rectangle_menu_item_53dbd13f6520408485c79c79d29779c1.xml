@@ -7,36 +7,36 @@
         <display_2/>
         <display_date/>
         <filter/>
-        <glyph>list</glyph>
+        <glyph>forward</glyph>
         <hint/>
         <kb_article/>
         <kb_category/>
         <kb_topic/>
-        <label>All Visits</label>
-        <order>400</order>
+        <label>Future Visits</label>
+        <order>300</order>
         <record_script/>
         <sc_cat_item/>
         <sc_category/>
         <short_description/>
-        <sp_page display_value="x_1085196_visita_0_visits">3d7e859cd86546f7bb56e94b6a61af16</sp_page>
+        <sp_page display_value="x_1085196_visita_0_future_visits">fac70662a71f4d5ea9063b580fd04857</sp_page>
         <sp_rectangle_menu display_value="Visitation Menu">a624f94314464c338cb44154abbb7a5d</sp_rectangle_menu>
         <sp_rectangle_menu_item/>
         <sys_class_name>sp_rectangle_menu_item</sys_class_name>
         <sys_created_by>admin</sys_created_by>
-        <sys_created_on>2026-09-04 04:07:30</sys_created_on>
-        <sys_id>8c9d6a7f29a44eb787969e18cab82a55</sys_id>
+        <sys_created_on>2026-09-04 07:22:47</sys_created_on>
+        <sys_id>53dbd13f6520408485c79c79d29779c1</sys_id>
         <sys_mod_count>0</sys_mod_count>
-        <sys_name>Visits</sys_name>
+        <sys_name>Future Visits</sys_name>
         <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
         <sys_policy/>
         <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
-        <sys_update_name>sp_rectangle_menu_item_8c9d6a7f29a44eb787969e18cab82a55</sys_update_name>
+        <sys_update_name>sp_rectangle_menu_item_53dbd13f6520408485c79c79d29779c1</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2026-09-04 04:07:30</sys_updated_on>
+        <sys_updated_on>2026-09-04 07:22:47</sys_updated_on>
         <table/>
         <type>page</type>
         <url/>
         <url_target/>
     </sp_rectangle_menu_item>
-    <sys_translated_text action="delete_multiple" query="documentkey=8c9d6a7f29a44eb787969e18cab82a55"/>
+    <sys_translated_text action="delete_multiple" query="documentkey=53dbd13f6520408485c79c79d29779c1"/>
 </record_update>

@@ -2,7 +2,7 @@
     <sys_user_role action="INSERT_OR_UPDATE">
         <assignable_by/>
         <can_delegate>true</can_delegate>
-        <description>Can view visit and guest records</description>
+        <description>Can view visit records</description>
         <elevated_privilege>false</elevated_privilege>
         <federated_id>0e/aYbL0YVZd1aaTvcCzX6c3yIuLBxWggzyG9WO7Et0=</federated_id>
         <grantable>true</grantable>
