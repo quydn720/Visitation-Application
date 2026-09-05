@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_user_role_contains">
+    <sys_user_role_contains action="INSERT_OR_UPDATE">
+        <contains display_value="x_1085196_visita_0.receptionist" name="x_1085196_visita_0.receptionist">cda3565f1e2340a4a557b46c0a5ef69d</contains>
+        <role display_value="x_1085196_visita_0.admin" name="x_1085196_visita_0.admin">4ebb3522c5904ce5b952816816beede4</role>
+        <sys_class_name>sys_user_role_contains</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:45</sys_created_on>
+        <sys_id>f6978741abdb412ba8474c82b6c1b015</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1085196_visita_0.receptionist.x_1085196_visita_0.admin</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sys_user_role_contains_f6978741abdb412ba8474c82b6c1b015</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:45</sys_updated_on>
+    </sys_user_role_contains>
+</record_update>

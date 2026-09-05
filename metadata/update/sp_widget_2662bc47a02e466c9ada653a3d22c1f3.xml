@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function () {
+  var c = this;
+
+  c.navigateTo = function (pageId, params) {
+    var url = "?id=" + pageId;
+    if (params) {
+      for (var key in params) {
+        url += "&" + key + "=" + encodeURIComponent(params[key]);
+      }
+    }
+    window.location.href = url;
+  };
+
+  c.goToVisits = function (filter) {
+    c.navigateTo("x_1085196_visita_0_visits", { filter: filter });
+  };
+
+  c.goToDetail = function (sysId) {
+    c.navigateTo("x_1085196_visita_0_visit_detail", { sys_id: sysId });
+  };
+
+  c.getStatusClass = function (status) {
+    var map = {
+      pending: "label-warning",
+      approved: "label-info",
+      checked_in: "label-success",
+      checked_out: "label-default",
+      cancelled: "label-danger"
+    };
+    return map[status] || "label-default";
+  };
+
+  c.getStatusLabel = function (status) {
+    var map = {
+      pending: "Pending",
+      approved: "Approved",
+      checked_in: "Checked In",
+      checked_out: "Checked Out",
+      cancelled: "Cancelled"
+    };
+    return map[status] || status;
+  };
+};
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>/* Hero */
+.sp-hero {
+  background: linear-gradient(135deg, lighten($brand-primary, 30%) 0%, lighten($brand-primary, 15%) 50%, $brand-primary 100%);
+  border-radius: $border-radius-large;
+  margin-bottom: 24px;
+  overflow: hidden;
+  position: relative;
+  &amp;::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba($btn-primary-color, 0.15);
+    pointer-events: none;
+  }
+}
+.sp-hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 48px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.sp-hero-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: $btn-primary-color;
+  margin: 0 0 6px;
+  line-height: 1.2;
+}
+.sp-hero-subtitle {
+  font-size: $font-size-small;
+  color: $btn-primary-color;
+  opacity: 0.75;
+  margin: 0;
+  max-width: 560px;
+}
+.sp-hero-btn {
+  background: rgba($btn-primary-color, 0.85);
+  color: $brand-primary;
+  border: none;
+  border-radius: $border-radius-base;
+  height: 44px;
+  padding: 0 20px;
+  font-size: $font-size-base;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: background 0.15s;
+  &amp;:hover {
+    background: $btn-primary-color;
+  }
+}
+
+/* Stat Tiles */
+.sp-card-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.sp-card-grid &gt; [class*="col-"] {
+  display: flex;
+  margin-bottom: 24px;
+}
+.sp-stat-tile {
+  background: $background-primary;
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-large;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba($text-color, 0.06);
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  &amp;:hover {
+    box-shadow: 0 2px 8px rgba($text-color, 0.12);
+    border-color: $brand-primary;
+  }
+}
+.sp-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: $border-radius-large;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.sp-stat-icon-info { background: $state-info-bg; color: $brand-info; }
+.sp-stat-icon-success { background: $state-success-bg; color: $brand-success; }
+.sp-stat-icon-warning { background: $state-warning-bg; color: $brand-warning; }
+.sp-stat-icon-danger { background: $state-danger-bg; color: $brand-danger; }
+.sp-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: $text-color;
+  line-height: 1;
+}
+.sp-stat-label {
+  font-size: 12px;
+  color: $text-muted;
+  margin-top: 4px;
+}
+.sp-stat-body {
+  flex: 1;
+}
+
+/* Card */
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-large;
+  box-shadow: 0 1px 4px rgba($text-color, 0.07);
+  background: $background-primary;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.sp-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: $background-primary;
+  border-bottom: 1px solid $border-tertiary;
+  min-height: 52px;
+  flex-shrink: 0;
+}
+.sp-card-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin: 0;
+}
+.sp-card-icon { margin-right: 8px; color: $brand-primary; font-size: 16px; }
+.sp-card-body-flush { padding: 0; flex: 1 1 auto; overflow: hidden; }
+.sp-card-body { padding: 24px; flex: 1 1 auto; }
+.sp-card-actions { display: flex; gap: 8px; }
+
+/* Table */
+.sp-th {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px;
+  border-bottom: 2px solid $border-tertiary;
+  background: $background-secondary;
+}
+.sp-td {
+  font-size: $font-size-small;
+  padding: 12px 16px;
+  color: $text-color;
+  border-bottom: 1px solid $border-tertiary;
+  vertical-align: middle;
+}
+.sp-clickable-row {
+  cursor: pointer;
+  &amp;:hover { background: $background-secondary; }
+}
+
+/* Empty State */
+.sp-empty-state { padding: 64px 24px; }
+.sp-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.35;
+  color: $text-muted;
+}
+.sp-empty-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_dashboard</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>Visitation Dashboard</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  data.stats = {
+    today_total: 0,
+    pending: 0,
+    checked_in: 0,
+    checked_out: 0
+  };
+  data.portalSuffix = "x_1085196_visita_0_visitation";
+
+  try {
+    var today = new GlideDate();
+    var todayStr = today.getByFormat("yyyy-MM-dd");
+
+    // Today's total visits
+    var gr = new GlideRecord("x_1085196_visita_0_visit");
+    gr.addQuery("visit_date", todayStr);
+    gr.query();
+    data.stats.today_total = gr.getRowCount();
+
+    // Pending visits (all)
+    gr = new GlideRecord("x_1085196_visita_0_visit");
+    gr.addQuery("status", "pending");
+    gr.query();
+    data.stats.pending = gr.getRowCount();
+
+    // Currently checked in (today)
+    gr = new GlideRecord("x_1085196_visita_0_visit");
+    gr.addQuery("visit_date", todayStr);
+    gr.addQuery("status", "checked_in");
+    gr.query();
+    data.stats.checked_in = gr.getRowCount();
+
+    // Checked out today
+    gr = new GlideRecord("x_1085196_visita_0_visit");
+    gr.addQuery("visit_date", todayStr);
+    gr.addQuery("status", "checked_out");
+    gr.query();
+    data.stats.checked_out = gr.getRowCount();
+
+    // Recent visits for quick reference
+    data.recentVisits = [];
+    gr = new GlideRecord("x_1085196_visita_0_visit");
+    gr.addQuery("visit_date", todayStr);
+    gr.orderByDesc("sys_created_on");
+    gr.setLimit(5);
+    gr.query();
+    while (gr.next()) {
+      data.recentVisits.push({
+        sys_id: gr.getUniqueValue(),
+        number: gr.getValue("number"),
+        visitor_name: gr.getValue("visitor_name"),
+        status: gr.getValue("status"),
+        host: gr.getDisplayValue("host") + "",
+        visit_date: gr.getDisplayValue("visit_date") + "",
+        purpose: gr.getValue("purpose")
+      });
+    }
+  } catch (e) {
+    gs.error("Visit Dashboard error: " + e.message);
+  }
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:31</sys_created_on>
+        <sys_id>2662bc47a02e466c9ada653a3d22c1f3</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visitation Dashboard</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_2662bc47a02e466c9ada653a3d22c1f3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:31</sys_updated_on>
+        <template><![CDATA[<div>
+  <!-- Hero Section -->
+  <div class="sp-hero">
+    <div class="sp-hero-inner">
+      <div class="sp-hero-text">
+        <h1 class="sp-hero-title">Visitation Portal</h1>
+        <p class="sp-hero-subtitle">Manage visitor check-ins, check-outs, and visit tracking</p>
+      </div>
+      <div class="sp-hero-actions">
+        <button type="button" class="btn sp-hero-btn" ng-click="c.goToVisits('all')">
+          <span class="glyphicon glyphicon-list"></span>
+          View All Visits
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stat Tiles -->
+  <div class="row sp-card-grid">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="sp-stat-tile" ng-click="c.goToVisits('today')" role="button" tabindex="0">
+        <div class="sp-stat-icon sp-stat-icon-info">
+          <span class="glyphicon glyphicon-calendar"></span>
+        </div>
+        <div class="sp-stat-body">
+          <div class="sp-stat-value">{{c.data.stats.today_total}}</div>
+          <div class="sp-stat-label">Today's Visits</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="sp-stat-tile" ng-click="c.goToVisits('pending')" role="button" tabindex="0">
+        <div class="sp-stat-icon sp-stat-icon-warning">
+          <span class="glyphicon glyphicon-time"></span>
+        </div>
+        <div class="sp-stat-body">
+          <div class="sp-stat-value">{{c.data.stats.pending}}</div>
+          <div class="sp-stat-label">Pending Approval</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="sp-stat-tile" ng-click="c.goToVisits('checked_in')" role="button" tabindex="0">
+        <div class="sp-stat-icon sp-stat-icon-success">
+          <span class="glyphicon glyphicon-log-in"></span>
+        </div>
+        <div class="sp-stat-body">
+          <div class="sp-stat-value">{{c.data.stats.checked_in}}</div>
+          <div class="sp-stat-label">Checked In</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="sp-stat-tile" ng-click="c.goToVisits('checked_out')" role="button" tabindex="0">
+        <div class="sp-stat-icon sp-stat-icon-danger">
+          <span class="glyphicon glyphicon-log-out"></span>
+        </div>
+        <div class="sp-stat-body">
+          <div class="sp-stat-value">{{c.data.stats.checked_out}}</div>
+          <div class="sp-stat-label">Checked Out</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Visits -->
+  <div class="panel panel-default sp-card">
+    <div class="panel-heading sp-card-header">
+      <h3 class="panel-title sp-card-title">
+        <span class="glyphicon glyphicon-time sp-card-icon"></span>
+        Today's Recent Visits
+      </h3>
+      <div class="sp-card-actions">
+        <button type="button" class="btn btn-sm btn-default" ng-click="c.goToVisits('today')">
+          View All
+        </button>
+      </div>
+    </div>
+    <div class="panel-body sp-card-body-flush" ng-if="c.data.recentVisits.length > 0">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th class="sp-th">Number</th>
+            <th class="sp-th">Visitor</th>
+            <th class="sp-th">Host</th>
+            <th class="sp-th">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="sp-clickable-row" ng-repeat="visit in c.data.recentVisits track by visit.sys_id"
+              ng-click="c.goToDetail(visit.sys_id)">
+            <td class="sp-td"><strong>{{visit.number}}</strong></td>
+            <td class="sp-td">{{visit.visitor_name}}</td>
+            <td class="sp-td">{{visit.host}}</td>
+            <td class="sp-td">
+              <span class="label" ng-class="c.getStatusClass(visit.status)">
+                {{c.getStatusLabel(visit.status)}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-body sp-card-body" ng-if="c.data.recentVisits.length === 0">
+      <div class="sp-empty-state text-center">
+        <span class="glyphicon glyphicon-calendar sp-empty-icon"></span>
+        <h4 class="sp-empty-title">No visits today</h4>
+        <p class="text-muted">There are no visits scheduled for today.</p>
+      </div>
+    </div>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

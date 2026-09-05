@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="1fd13c6fa92f412ba8f0bf0e1dbc9941" label="Guest" name="x_1085196_visita_0_guest" type="collection">
+        <element label="Phone" max_length="40" name="phone" type="string"/>
+        <element label="Company" max_length="100" name="company" type="string"/>
+        <element label="Check-in Time" max_length="40" name="check_in_time" type="glide_date_time"/>
+        <element label="Check-out Time" max_length="40" name="check_out_time" type="glide_date_time"/>
+        <element default="pending" label="Status" mandatory="true" max_length="40" name="status" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Checked Out" sequence="3" value="checked_out"/>
+                <element inactive_on_update="false" label="Checked In" sequence="2" value="checked_in"/>
+                <element inactive_on_update="false" label="Pending" sequence="1" value="pending"/>
+            </choice>
+        </element>
+        <element label="Last Name" mandatory="true" max_length="80" name="last_name" type="string"/>
+        <element label="Email" max_length="255" name="email" type="email"/>
+        <element label="Visit" mandatory="true" max_length="32" name="visit" reference="x_1085196_visita_0_visit" type="reference"/>
+        <element label="ID Number" max_length="60" name="id_number" type="string"/>
+        <element label="ID Type" max_length="40" name="id_type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Driver's License" sequence="1" value="drivers_license"/>
+                <element inactive_on_update="false" label="Other" sequence="4" value="other"/>
+                <element inactive_on_update="false" label="National ID" sequence="3" value="national_id"/>
+                <element inactive_on_update="false" label="Passport" sequence="2" value="passport"/>
+            </choice>
+        </element>
+        <element display="true" label="First Name" mandatory="true" max_length="80" name="first_name" type="string"/>
+        <index name="index">
+            <element name="visit"/>
+        </index>
+    </element>
+</database>

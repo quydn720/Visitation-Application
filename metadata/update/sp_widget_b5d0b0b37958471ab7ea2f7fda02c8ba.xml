@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[api.controller = function ($scope, $rootScope) {
+  var c = this;
+
+  c.loading = false;
+
+  // Listen for visit updates to refresh guest list
+  $scope.$on("sp.visit.updated", function () {
+    c.refresh();
+  });
+
+  c.refresh = function () {
+    c.data.message = "";
+    c.data.success = false;
+    c.data.error = false;
+    c.server.get({ visit_sys_id: c.data.visitSysId }).then(function (r) {
+      c.data = r.data;
+    });
+  };
+
+  c.guestAction = function (action, guest) {
+    c.loading = true;
+    c.data.message = "";
+    c.data.success = false;
+    c.data.error = false;
+    c.server.get({
+      guest_action: action,
+      guest_sys_id: guest.sys_id,
+      visit_sys_id: c.data.visitSysId
+    }).then(function (r) {
+      c.data = r.data;
+      c.loading = false;
+      // Notify visit detail to refresh too
+      $rootScope.$broadcast("sp.guest.updated", { visit_sys_id: c.data.visitSysId });
+    }, function () {
+      c.loading = false;
+    });
+  };
+
+  c.canCheckInGuest = function (guest) {
+    return guest && guest.status === "pending";
+  };
+
+  c.canCheckOutGuest = function (guest) {
+    return guest && guest.status === "checked_in";
+  };
+
+  c.getStatusClass = function (status) {
+    var map = {
+      pending: "label-warning",
+      checked_in: "label-success",
+      checked_out: "label-default"
+    };
+    return map[status] || "label-default";
+  };
+
+  c.getStatusLabel = function (status) {
+    var map = {
+      pending: "Pending",
+      checked_in: "Checked In",
+      checked_out: "Checked Out"
+    };
+    return map[status] || status;
+  };
+};
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>/* Card */
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid $border-tertiary;
+  border-radius: $border-radius-large;
+  box-shadow: 0 1px 4px rgba($text-color, 0.07);
+  background: $background-primary;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+.sp-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: $background-primary;
+  border-bottom: 1px solid $border-tertiary;
+  min-height: 52px;
+}
+.sp-card-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin: 0;
+}
+.sp-card-icon { margin-right: 8px; color: $brand-primary; font-size: 16px; }
+.sp-card-body-flush { padding: 0; flex: 1 1 auto; overflow-x: auto; }
+.sp-card-body { padding: 24px; flex: 1 1 auto; }
+
+/* Alert */
+.sp-alert {
+  margin: 0 0 16px 0;
+  border-radius: $border-radius-large;
+  font-size: $font-size-small;
+}
+.sp-alert .glyphicon { margin-right: 6px; }
+
+/* Table */
+.sp-th {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 16px;
+  border-bottom: 2px solid $border-tertiary;
+  background: $background-secondary;
+  white-space: nowrap;
+}
+.sp-td {
+  font-size: $font-size-small;
+  padding: 12px 16px;
+  color: $text-color;
+  border-bottom: 1px solid $border-tertiary;
+  vertical-align: middle;
+}
+
+/* Action cell */
+.sp-action-cell {
+  white-space: nowrap;
+}
+.sp-btn-action {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: $border-radius-base;
+}
+.sp-btn-action .glyphicon { margin-right: 3px; font-size: 11px; }
+.sp-done-label {
+  font-size: 11px;
+  font-style: italic;
+}
+.sp-done-label .glyphicon { margin-right: 3px; }
+
+/* Empty State */
+.sp-empty-state { padding: 48px 24px; }
+.sp-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.35;
+  color: $text-muted;
+}
+.sp-empty-title {
+  font-size: $font-size-large;
+  font-weight: 600;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>x_1085196_visita_0_guest_list</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {
+}]]></link>
+        <name>Visit Guest List</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function () {
+  data.guests = [];
+  data.visitSysId = "";
+  data.message = "";
+  data.success = false;
+  data.error = false;
+
+  try {
+    var visitSysId = "";
+    if (input && input.visit_sys_id) {
+      visitSysId = input.visit_sys_id;
+    } else {
+      visitSysId = $sp.getParameter("sys_id");
+    }
+    data.visitSysId = visitSysId;
+
+    // Handle guest actions (individual check-in/check-out)
+    if (input && input.guest_action && input.guest_sys_id) {
+      var guestGr = new GlideRecord("x_1085196_visita_0_guest");
+      if (guestGr.get(input.guest_sys_id)) {
+        var currentStatus = guestGr.getValue("status");
+        if (input.guest_action === "check_in" && currentStatus === "pending") {
+          guestGr.setValue("status", "checked_in");
+          guestGr.setValue("check_in_time", new GlideDateTime().getValue());
+          guestGr.update();
+          data.success = true;
+          data.message = guestGr.getValue("first_name") + " " + guestGr.getValue("last_name") + " checked in.";
+        } else if (input.guest_action === "check_out" && currentStatus === "checked_in") {
+          guestGr.setValue("status", "checked_out");
+          guestGr.setValue("check_out_time", new GlideDateTime().getValue());
+          guestGr.update();
+          data.success = true;
+          data.message = guestGr.getValue("first_name") + " " + guestGr.getValue("last_name") + " checked out.";
+        } else {
+          data.error = true;
+          data.message = "Action not allowed for the current guest status.";
+        }
+      }
+    }
+
+    // Load guest list
+    if (visitSysId) {
+      var gr = new GlideRecord("x_1085196_visita_0_guest");
+      gr.addQuery("visit", visitSysId);
+      gr.orderBy("last_name");
+      gr.setLimit(50);
+      gr.query();
+
+      while (gr.next()) {
+        data.guests.push({
+          sys_id: gr.getUniqueValue(),
+          first_name: gr.getValue("first_name"),
+          last_name: gr.getValue("last_name"),
+          email: gr.getValue("email"),
+          phone: gr.getValue("phone"),
+          company: gr.getValue("company"),
+          id_type: gr.getDisplayValue("id_type") + "",
+          id_number: gr.getValue("id_number"),
+          status: gr.getValue("status"),
+          check_in_time: gr.getDisplayValue("check_in_time") + "",
+          check_out_time: gr.getDisplayValue("check_out_time") + ""
+        });
+      }
+    }
+  } catch (e) {
+    gs.error("Guest List error: " + e.message);
+    data.error = true;
+    data.message = "An error occurred loading guests.";
+  }
+})();
+]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:31</sys_created_on>
+        <sys_id>b5d0b0b37958471ab7ea2f7fda02c8ba</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Visit Guest List</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sp_widget_b5d0b0b37958471ab7ea2f7fda02c8ba</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:31</sys_updated_on>
+        <template><![CDATA[<div>
+  <!-- Action messages -->
+  <div class="alert alert-success sp-alert" ng-if="c.data.success && c.data.message">
+    <span class="glyphicon glyphicon-ok-circle"></span> {{c.data.message}}
+  </div>
+  <div class="alert alert-danger sp-alert" ng-if="c.data.error && c.data.message">
+    <span class="glyphicon glyphicon-exclamation-sign"></span> {{c.data.message}}
+  </div>
+
+  <div class="panel panel-default sp-card">
+    <div class="panel-heading sp-card-header">
+      <h3 class="panel-title sp-card-title">
+        <span class="glyphicon glyphicon-user sp-card-icon"></span>
+        Guests
+        <span class="badge" ng-if="c.data.guests.length > 0">{{c.data.guests.length}}</span>
+      </h3>
+    </div>
+
+    <div class="panel-body sp-card-body-flush" ng-if="c.data.guests.length > 0">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="sp-th">Name</th>
+            <th class="sp-th hidden-xs">Email</th>
+            <th class="sp-th hidden-xs">Company</th>
+            <th class="sp-th">Status</th>
+            <th class="sp-th hidden-xs">Check-in</th>
+            <th class="sp-th hidden-xs">Check-out</th>
+            <th class="sp-th">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="guest in c.data.guests track by guest.sys_id">
+            <td class="sp-td"><strong>{{guest.first_name}} {{guest.last_name}}</strong></td>
+            <td class="sp-td hidden-xs">{{guest.email || '—'}}</td>
+            <td class="sp-td hidden-xs">{{guest.company || '—'}}</td>
+            <td class="sp-td">
+              <span class="label" ng-class="c.getStatusClass(guest.status)">
+                {{c.getStatusLabel(guest.status)}}
+              </span>
+            </td>
+            <td class="sp-td hidden-xs">{{guest.check_in_time || '—'}}</td>
+            <td class="sp-td hidden-xs">{{guest.check_out_time || '—'}}</td>
+            <td class="sp-td sp-action-cell">
+              <button class="btn btn-xs btn-success sp-btn-action"
+                      ng-if="c.canCheckInGuest(guest)"
+                      ng-click="c.guestAction('check_in', guest)"
+                      ng-disabled="c.loading"
+                      title="Check in this guest">
+                <span class="glyphicon glyphicon-log-in"></span> Check In
+              </button>
+              <button class="btn btn-xs btn-default sp-btn-action"
+                      ng-if="c.canCheckOutGuest(guest)"
+                      ng-click="c.guestAction('check_out', guest)"
+                      ng-disabled="c.loading"
+                      title="Check out this guest">
+                <span class="glyphicon glyphicon-log-out"></span> Check Out
+              </button>
+              <span class="text-muted sp-done-label" ng-if="guest.status === 'checked_out'">
+                <span class="glyphicon glyphicon-ok"></span> Done
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-body sp-card-body" ng-if="c.data.guests.length === 0">
+      <div class="sp-empty-state text-center">
+        <span class="glyphicon glyphicon-user sp-empty-icon"></span>
+        <h4 class="sp-empty-title">No guests</h4>
+        <p class="text-muted">No guests have been added to this visit.</p>
+      </div>
+    </div>
+  </div>
+</div>
+]]></template>
+    </sp_widget>
+</record_update>

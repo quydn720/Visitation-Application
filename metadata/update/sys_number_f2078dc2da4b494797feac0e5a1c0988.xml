@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_number">
+    <sys_number action="INSERT_OR_UPDATE">
+        <category display_value="" name="x_1085196_visita_0_visit">x_1085196_visita_0_visit</category>
+        <maximum_digits>7</maximum_digits>
+        <number>1000</number>
+        <prefix>VIS</prefix>
+        <sys_class_name>sys_number</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-09-04 04:07:43</sys_created_on>
+        <sys_id>f2078dc2da4b494797feac0e5a1c0988</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>VIS</sys_name>
+        <sys_package display_value="Visitation Application" source="x_1085196_visita_0">99ca6f2293830310d405f3d7dd03d620</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Visitation Application">99ca6f2293830310d405f3d7dd03d620</sys_scope>
+        <sys_update_name>sys_number_f2078dc2da4b494797feac0e5a1c0988</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-09-04 04:07:43</sys_updated_on>
+    </sys_number>
+</record_update>
